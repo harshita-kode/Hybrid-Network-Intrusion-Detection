@@ -1,0 +1,16 @@
+feature,mean_abs_shap
+Destination Port,0.7797416
+Init_Win_bytes_backward,0.5701812
+Init_Win_bytes_forward,0.5254204
+Flow IAT Min,0.4488987
+Fwd IAT Min,0.42920166
+min_seg_size_forward,0.31200734
+Bwd Packets/s,0.27073684
+Flow IAT Mean,0.23771513
+Flow Duration,0.2341493
+Total Length of Fwd Packets,0.23237933
+Fwd Packet Length Max,0.21640292
+Flow Bytes/s,0.21286973
+Bwd Packet Length Mean,0.20062113
+Fwd IAT Total,0.19300278
+Flow IAT Max,0.18647647
