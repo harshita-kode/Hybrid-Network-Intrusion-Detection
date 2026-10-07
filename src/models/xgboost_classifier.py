@@ -1,9 +1,6 @@
-# src/models/xgboost_classifier.py
-
 import os
 import joblib
 import numpy as np
-import pandas as pd
 
 from xgboost import XGBClassifier
 
@@ -13,8 +10,7 @@ from sklearn.metrics import (
     precision_score,
     recall_score,
     f1_score,
-    classification_report,
-    confusion_matrix
+    classification_report
 )
 from sklearn.utils.class_weight import compute_sample_weight
 
@@ -52,15 +48,16 @@ class XGBoostIntrusionClassifier:
 
         self.feature_names = None
 
-    # --------------------------------------------------
-    # TRAIN
-    # --------------------------------------------------
-
-    def fit(self, X_train, y_train, X_validation=None, y_validation=None):
+    def fit(
+        self,
+        X_train,
+        y_train,
+        X_validation=None,
+        y_validation=None
+    ):
 
         self.feature_names = list(X_train.columns)
 
-        # Encode attack labels
         y_train_encoded = self.label_encoder.fit_transform(y_train)
 
         sample_weights = None
@@ -71,11 +68,9 @@ class XGBoostIntrusionClassifier:
                 y=y_train_encoded
             )
 
-        # Validation set
         eval_set = None
 
         if X_validation is not None and y_validation is not None:
-
             y_validation_encoded = self.label_encoder.transform(
                 y_validation
             )
@@ -84,7 +79,6 @@ class XGBoostIntrusionClassifier:
                 (X_validation, y_validation_encoded)
             ]
 
-        # Train
         self.model.fit(
             X_train,
             y_train_encoded,
@@ -95,55 +89,50 @@ class XGBoostIntrusionClassifier:
 
         return self
 
-    # --------------------------------------------------
-    # PREDICT CLASS
-    # --------------------------------------------------
-
     def predict(self, X):
 
         encoded_predictions = self.model.predict(X)
 
-        predictions = self.label_encoder.inverse_transform(
+        return self.label_encoder.inverse_transform(
             encoded_predictions.astype(int)
         )
-
-        return predictions
-
-    # --------------------------------------------------
-    # PREDICT PROBABILITIES
-    # --------------------------------------------------
 
     def predict_proba(self, X):
 
         return self.model.predict_proba(X)
 
-    # --------------------------------------------------
-    # PREDICT + CONFIDENCE
-    # --------------------------------------------------
-
     def predict_with_confidence(self, X):
 
         probabilities = self.predict_proba(X)
 
-        max_indices = np.argmax(probabilities, axis=1)
-
-        confidence = np.max(probabilities, axis=1)
-
-        predicted_classes = self.label_encoder.inverse_transform(
-            max_indices
+        predicted_indices = np.argmax(
+            probabilities,
+            axis=1
         )
 
-        return predicted_classes, confidence, probabilities
+        confidence = np.max(
+            probabilities,
+            axis=1
+        )
 
-    # --------------------------------------------------
-    # EVALUATION
-    # --------------------------------------------------
+        predicted_classes = self.label_encoder.inverse_transform(
+            predicted_indices
+        )
+
+        return (
+            predicted_classes,
+            confidence,
+            probabilities
+        )
 
     def evaluate(self, X, y):
 
         predictions = self.predict(X)
 
-        accuracy = accuracy_score(y, predictions)
+        accuracy = accuracy_score(
+            y,
+            predictions
+        )
 
         precision = precision_score(
             y,
@@ -159,14 +148,14 @@ class XGBoostIntrusionClassifier:
             zero_division=0
         )
 
-        f1_weighted = f1_score(
+        weighted_f1 = f1_score(
             y,
             predictions,
             average="weighted",
             zero_division=0
         )
 
-        f1_macro = f1_score(
+        macro_f1 = f1_score(
             y,
             predictions,
             average="macro",
@@ -174,14 +163,15 @@ class XGBoostIntrusionClassifier:
         )
 
         print("\n========== MODEL PERFORMANCE ==========")
-
         print(f"Accuracy       : {accuracy:.4f}")
         print(f"Precision      : {precision:.4f}")
         print(f"Recall         : {recall:.4f}")
-        print(f"Weighted F1    : {f1_weighted:.4f}")
-        print(f"Macro F1       : {f1_macro:.4f}")
+        print(f"Weighted F1    : {weighted_f1:.4f}")
+        print(f"Macro F1       : {macro_f1:.4f}")
 
-        print("\n========== CLASSIFICATION REPORT ==========\n")
+        print(
+            "\n========== CLASSIFICATION REPORT ==========\n"
+        )
 
         print(
             classification_report(
@@ -195,37 +185,36 @@ class XGBoostIntrusionClassifier:
             "accuracy": accuracy,
             "precision": precision,
             "recall": recall,
-            "weighted_f1": f1_weighted,
-            "macro_f1": f1_macro
+            "weighted_f1": weighted_f1,
+            "macro_f1": macro_f1
         }
-
-    # --------------------------------------------------
-    # SAVE MODEL
-    # --------------------------------------------------
 
     def save(self, path):
 
-        os.makedirs(
-            os.path.dirname(path),
-            exist_ok=True
-        )
+        directory = os.path.dirname(path)
+
+        if directory:
+            os.makedirs(
+                directory,
+                exist_ok=True
+            )
 
         joblib.dump(
             self,
             path
         )
 
-        print(f"\nModel saved to: {path}")
-
-    # --------------------------------------------------
-    # LOAD MODEL
-    # --------------------------------------------------
+        print(
+            f"\nModel saved to: {path}"
+        )
 
     @staticmethod
     def load(path):
 
         model = joblib.load(path)
 
-        print(f"\nModel loaded from: {path}")
+        print(
+            f"\nModel loaded from: {path}"
+        )
 
         return model

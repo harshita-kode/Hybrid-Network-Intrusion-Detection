@@ -1,18 +1,42 @@
-# src/models/confidence.py
-
 import numpy as np
 from sklearn.metrics import precision_score
 
 
+DEFAULT_CONFIDENCE_THRESHOLD = 0.95
+
+
 def get_confidence(probabilities):
     """
-    Confidence = highest class probability.
+    Confidence is the highest predicted class probability.
     """
 
-    return np.max(
-        probabilities,
-        axis=1
+    return np.max(probabilities, axis=1)
+
+
+def route_by_confidence(
+    predictions,
+    probabilities,
+    threshold=DEFAULT_CONFIDENCE_THRESHOLD
+):
+    """
+    Route predictions based on confidence.
+
+    HIGH_CONFIDENCE:
+        confidence >= threshold
+
+    LOW_CONFIDENCE:
+        confidence < threshold
+    """
+
+    confidence = get_confidence(probabilities)
+
+    status = np.where(
+        confidence >= threshold,
+        "HIGH_CONFIDENCE",
+        "LOW_CONFIDENCE"
     )
+
+    return confidence, status
 
 
 def find_confidence_threshold(
@@ -22,15 +46,13 @@ def find_confidence_threshold(
     target_precision=0.95
 ):
     """
-    Find the lowest confidence threshold that gives
-    at least the target precision on accepted predictions.
+    Find the lowest confidence threshold that achieves
+    the requested precision on accepted predictions.
 
     Samples below the threshold are considered uncertain.
     """
 
-    confidence = get_confidence(
-        probabilities
-    )
+    confidence = get_confidence(probabilities)
 
     thresholds = np.arange(
         0.50,
@@ -38,7 +60,7 @@ def find_confidence_threshold(
         0.01
     )
 
-    best_threshold = 0.80
+    best_threshold = DEFAULT_CONFIDENCE_THRESHOLD
 
     for threshold in thresholds:
 
@@ -47,11 +69,8 @@ def find_confidence_threshold(
         if accepted.sum() == 0:
             continue
 
-        accepted_true = np.array(y_true)[accepted]
-
-        accepted_predictions = np.array(
-            predictions
-        )[accepted]
+        accepted_true = np.asarray(y_true)[accepted]
+        accepted_predictions = np.asarray(predictions)[accepted]
 
         precision = precision_score(
             accepted_true,
@@ -61,7 +80,6 @@ def find_confidence_threshold(
         )
 
         if precision >= target_precision:
-
             best_threshold = threshold
             break
 
