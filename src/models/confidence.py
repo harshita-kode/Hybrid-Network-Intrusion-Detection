@@ -9,7 +9,6 @@ def get_confidence(probabilities):
     """
     Confidence is the highest predicted class probability.
     """
-
     return np.max(probabilities, axis=1)
 
 
@@ -48,8 +47,6 @@ def find_confidence_threshold(
     """
     Find the lowest confidence threshold that achieves
     the requested precision on accepted predictions.
-
-    Samples below the threshold are considered uncertain.
     """
 
     confidence = get_confidence(probabilities)

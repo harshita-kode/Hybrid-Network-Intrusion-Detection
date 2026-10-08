@@ -3,7 +3,11 @@ import sys
 
 import pandas as pd
 
-# Allow imports from src/
+
+# ============================================================
+# PROJECT PATH
+# ============================================================
+
 PROJECT_ROOT = os.path.abspath(
     os.path.join(
         os.path.dirname(__file__),
@@ -16,6 +20,7 @@ sys.path.insert(
     0,
     os.path.join(PROJECT_ROOT, "src")
 )
+
 
 from models.xgboost_classifier import (
     XGBoostIntrusionClassifier
@@ -34,7 +39,8 @@ from models.confidence import (
 DATA_DIR = os.path.join(
     PROJECT_ROOT,
     "data",
-    "processed"
+    "processed",
+    "Data_V2"
 )
 
 RESULT_DIR = os.path.join(
@@ -54,9 +60,9 @@ MODEL_PATH = os.path.join(
 # DATA FILES
 # ============================================================
 
-TRAIN_FILE = "classifier_train.csv"
-VALIDATION_FILE = "classifier_validation.csv"
-TEST_FILE = "classifier_test.csv"
+TRAIN_FILE = "known_train.parquet"
+VALIDATION_FILE = "known_validation.parquet"
+TEST_FILE = "known_test.parquet"
 
 LABEL_COLUMN = "Label"
 METADATA_COLUMNS = ["source_file"]
@@ -68,18 +74,27 @@ METADATA_COLUMNS = ["source_file"]
 
 def load_data():
 
-    print("Loading datasets...")
+    print("Loading Data_V2 datasets...")
 
-    train = pd.read_csv(
-        os.path.join(DATA_DIR, TRAIN_FILE)
+    train = pd.read_parquet(
+        os.path.join(
+            DATA_DIR,
+            TRAIN_FILE
+        )
     )
 
-    validation = pd.read_csv(
-        os.path.join(DATA_DIR, VALIDATION_FILE)
+    validation = pd.read_parquet(
+        os.path.join(
+            DATA_DIR,
+            VALIDATION_FILE
+        )
     )
 
-    test = pd.read_csv(
-        os.path.join(DATA_DIR, TEST_FILE)
+    test = pd.read_parquet(
+        os.path.join(
+            DATA_DIR,
+            TEST_FILE
+        )
     )
 
     print("\nDataset shapes:")
@@ -164,14 +179,14 @@ def main():
         X_train.shape[1]
     )
 
-    print("\nClasses:")
+    print("\nKnown classes:")
     print(
         y_train.value_counts()
     )
 
-    # --------------------------------------------------------
-    # Create model
-    # --------------------------------------------------------
+    # ========================================================
+    # CREATE MODEL
+    # ========================================================
 
     model = XGBoostIntrusionClassifier(
         n_estimators=300,
@@ -182,9 +197,9 @@ def main():
         use_balanced_weights=False
     )
 
-    # --------------------------------------------------------
-    # Train
-    # --------------------------------------------------------
+    # ========================================================
+    # TRAIN
+    # ========================================================
 
     print("\nTraining XGBoost...")
 
@@ -197,9 +212,9 @@ def main():
 
     print("\nTraining completed.")
 
-    # --------------------------------------------------------
-    # Validation
-    # --------------------------------------------------------
+    # ========================================================
+    # VALIDATION
+    # ========================================================
 
     print(
         "\n========== VALIDATION =========="
@@ -210,9 +225,9 @@ def main():
         y_validation
     )
 
-    # --------------------------------------------------------
-    # Test
-    # --------------------------------------------------------
+    # ========================================================
+    # TEST
+    # ========================================================
 
     print(
         "\n========== TEST =========="
@@ -223,24 +238,24 @@ def main():
         y_test
     )
 
-    # --------------------------------------------------------
-    # Test confidence routing
-    # --------------------------------------------------------
+    # ========================================================
+    # CONFIDENCE ROUTING
+    # ========================================================
 
     print(
         "\n========== CONFIDENCE ROUTING =========="
     )
 
     predictions, confidence, probabilities = (
-        model.predict_with_confidence(X_test)
+        model.predict_with_confidence(
+            X_test
+        )
     )
-
-    confidence_threshold = DEFAULT_CONFIDENCE_THRESHOLD
 
     confidence, status = route_by_confidence(
         predictions,
         probabilities,
-        threshold=confidence_threshold
+        threshold=DEFAULT_CONFIDENCE_THRESHOLD
     )
 
     correct = (
@@ -279,7 +294,7 @@ def main():
 
     print(
         f"Confidence threshold : "
-        f"{confidence_threshold}"
+        f"{DEFAULT_CONFIDENCE_THRESHOLD}"
     )
 
     print(
@@ -303,21 +318,50 @@ def main():
     )
 
     print(
+        f"Correct samples routed : "
+        f"{correct_samples_routed:,}"
+    )
+
+    print(
         f"Error capture rate : "
         f"{error_capture_rate:.2f}%"
     )
 
-    # --------------------------------------------------------
-    # Save model
-    # --------------------------------------------------------
+    # ========================================================
+    # SAVE MODEL
+    # ========================================================
 
     model.save(
         MODEL_PATH
     )
 
-    # --------------------------------------------------------
-    # Save confidence results
-    # --------------------------------------------------------
+    # ========================================================
+    # SAVE TEST CLASSIFICATION REPORT
+    # ========================================================
+
+    from sklearn.metrics import classification_report
+
+    report = classification_report(
+        y_test,
+        predictions,
+        output_dict=True,
+        zero_division=0
+    )
+
+    report_df = pd.DataFrame(
+        report
+    ).transpose()
+
+    report_df.to_csv(
+        os.path.join(
+            RESULT_DIR,
+            "xgboost_test_classification_report.csv"
+        )
+    )
+
+    # ========================================================
+    # SAVE CONFIDENCE ROUTING
+    # ========================================================
 
     confidence_results = pd.DataFrame({
         "actual_class": y_test.to_numpy(),
@@ -334,9 +378,9 @@ def main():
         index=False
     )
 
-    # --------------------------------------------------------
-    # Save summary
-    # --------------------------------------------------------
+    # ========================================================
+    # SAVE CONFIDENCE SUMMARY
+    # ========================================================
 
     confidence_summary = pd.DataFrame({
         "metric": [
@@ -351,7 +395,7 @@ def main():
             "error_capture_rate"
         ],
         "value": [
-            confidence_threshold,
+            DEFAULT_CONFIDENCE_THRESHOLD,
             len(y_test),
             (~routed_mask).sum(),
             routed_samples,
@@ -371,9 +415,22 @@ def main():
         index=False
     )
 
+    # ========================================================
+    # SUMMARY
+    # ========================================================
+
     print(
         "\n========== PIPELINE COMPLETE =========="
     )
+
+    print(
+        "\nFinal test metrics:"
+    )
+
+    for metric, value in test_results.items():
+        print(
+            f"{metric:15s}: {value:.4f}"
+        )
 
 
 if __name__ == "__main__":

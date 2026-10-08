@@ -1,29 +1,18 @@
 import os
-import sys
-
+import joblib
 import numpy as np
 import pandas as pd
-import joblib
 
 from sklearn.preprocessing import LabelEncoder
 
-
-PROJECT_ROOT = os.path.abspath(
-    os.path.join(
-        os.path.dirname(__file__),
-        "..",
-        ".."
-    )
-)
-
-sys.path.insert(
-    0,
-    os.path.join(PROJECT_ROOT, "src")
-)
-
-from models.confidence import (
+from src.models.confidence import (
     route_by_confidence,
     DEFAULT_CONFIDENCE_THRESHOLD
+)
+
+
+PROJECT_ROOT = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "../..")
 )
 
 
@@ -33,32 +22,30 @@ MODEL_PATH = os.path.join(
     "xgboost_final.joblib"
 )
 
+
 TRAIN_PATH = os.path.join(
     PROJECT_ROOT,
     "data",
     "processed",
-    "classifier_train.csv"
+    "Data_V2",
+    "known_train.parquet"
 )
 
 
 def load_model():
 
-    model = joblib.load(
-        MODEL_PATH
-    )
+    model = joblib.load(MODEL_PATH)
 
-    print(
-        f"Model loaded from: {MODEL_PATH}"
-    )
+    print(f"Model loaded from: {MODEL_PATH}")
 
     return model
 
 
 def load_label_encoder():
 
-    train_labels = pd.read_csv(
+    train_labels = pd.read_parquet(
         TRAIN_PATH,
-        usecols=["Label"]
+        columns=["Label"]
     )
 
     label_encoder = LabelEncoder()
@@ -112,22 +99,33 @@ def predict_traffic(data):
         threshold=DEFAULT_CONFIDENCE_THRESHOLD
     )
 
+    probability_dicts = []
+
+    for row in probabilities:
+
+        probability_dict = {
+            class_name: float(probability)
+            for class_name, probability
+            in zip(
+                label_encoder.classes_,
+                row
+            )
+        }
+
+        probability_dicts.append(
+            probability_dict
+        )
+
     results = pd.DataFrame({
+
         "predicted_class": predictions,
+
         "confidence": confidence,
-        "status": status
+
+        "status": status,
+
+        "probabilities": probability_dicts
+
     })
 
     return results
-
-
-if __name__ == "__main__":
-
-    print(
-        "XGBoost inference module loaded successfully."
-    )
-
-    print(
-        f"Confidence threshold: "
-        f"{DEFAULT_CONFIDENCE_THRESHOLD}"
-    )
