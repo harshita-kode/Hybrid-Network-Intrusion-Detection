@@ -20,8 +20,8 @@ MODEL_PATH = os.path.join(
 
 TEST_PATH = os.path.join(
     PROJECT_ROOT,
-    "data",
-    "processed",
+    "notebooks",
+    "Data_V1",
     "classifier_test.csv"
 )
 
