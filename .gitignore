@@ -1,8 +1,9 @@
 data/raw/*.DS_Store
-data/processed/Data_V2/*
+data/processed/*
 
 notebooks/exploration/*.csv
 notebooks/exploration/*.parquet
 
 .DS_Store
 data/raw/*.csv
+data/raw/improved_CIC-IDS2017/*.csv
