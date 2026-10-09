@@ -1,10 +1,3 @@
-"""GC2 Member 1: shared Improved CICIDS2017 preparation. Run from anywhere:
-python prepare_gc2_improved_v3.py --input data/raw/improved_CIC-IDS2017
-Dependencies: pandas numpy scikit-learn pyarrow
-
-Creates new Data_V3; never overwrites Data_V2. Does not train models.
-IMPORTANT: A new split requires retraining V15, unless its fitted data match exactly.
-"""
 import argparse
 import json
 import re
@@ -79,13 +72,10 @@ def main():
     # Audit attempted family before changing labels.
     audit = pd.crosstab(df['Label'], df['is_attempted'])
     audit.to_csv(out / 'attempted_audit.csv')
-    # Prevent unknown-family attempted traffic being relabeled BENIGN and used for training.
     unknown_family_attempted = df['Label'].isin(UNKNOWN) & df['is_attempted']
     excluded_unknown_attempted = int(unknown_family_attempted.sum())
     df = df.loc[~unknown_family_attempted].copy()
     df.loc[df['is_attempted'], 'Label'] = 'BENIGN'
-    # Keep port for metadata and V15 port thresholds; do not include it in model features.
-    # No identifier, label, attempted marker or source file enters the model.
     required = FEATURES + ['Label', 'source_file']
     if 'Dst Port' in df.columns: required.append('Dst Port')
     df = df[required].copy()
@@ -95,7 +85,6 @@ def main():
     bad = vals.isna().any(axis=1)
     removed_nonfinite = int(bad.sum())
     df = df.loc[~bad].copy()
-    # V15-aligned invalid-negative checks, but preserve small IAT negatives and -1 TCP window sentinels.
     negative_cols = [c for c in ['Flow Duration', 'Flow Bytes/s', 'Flow Packets/s',
                                  'Fwd Header Length', 'Bwd Header Length', 'Fwd Seg Size Min'] if c in df]
     invalid_negative = (df[negative_cols] < 0).any(axis=1)
