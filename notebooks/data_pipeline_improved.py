@@ -77,10 +77,23 @@ def main():
     print("MERGED:", df.shape, flush=True)
     canonical = df["Label"].map(canonical_label)
     df["Label"] = canonical.map(lambda p: p[0])
-    attempted = canonical.map(lambda p: p[1]).to_numpy(dtype=bool)
+    # Create a writable NumPy array
+    attempted = canonical.map(lambda p: p[1]).to_numpy(
+        dtype=bool,
+        copy=True
+    )
+
     if "Attempted Category" in df.columns:
-        ac = pd.to_numeric(df["Attempted Category"], errors="coerce")
-        attempted |= (ac.notna() & ac.ne(-1)).to_numpy()
+        ac = pd.to_numeric(
+            df["Attempted Category"],
+            errors="coerce"
+        )
+
+        attempted_category_mask = (
+            ac.notna() & ac.ne(-1)
+        ).to_numpy(dtype=bool)
+
+        attempted = attempted | attempted_category_mask
     df["is_attempted"] = attempted
     print("Original family counts (before attempted policy):")
     print(df["Label"].value_counts().to_string(), flush=True)
