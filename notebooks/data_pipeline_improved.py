@@ -1,221 +1,596 @@
-import argparse
+from pathlib import Path
 import json
 import re
-from pathlib import Path
+import gc
 
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
+# ============================================================
+# GC2 - IMPROVED CICIDS2017 DATA PIPELINE
+# VERSION: DATA_V3_FULL
+#
+# Purpose:
+#   1. Preserve all original dataset columns.
+#   2. Retain identifiers and attempted-attack metadata.
+#   3. Clean the modelling features.
+#   4. Remove conflicting-label patterns.
+#   5. Remove duplicate feature vectors.
+#   6. Hold out three unknown attack families.
+#   7. Create shared XGBoost and Autoencoder datasets.
+#
+# IMPORTANT:
+#   Preserving a column does not mean using it for ML.
+# ============================================================
+
+
 SEED = 42
-UNKNOWN = ("Botnet", "FTP-Patator", "DoS Slowhttptest")
 
-FEATURES = """Protocol,Flow Duration,Total Fwd Packet,Total Bwd packets,Total Length of Fwd Packet,Total Length of Bwd Packet,Fwd Packet Length Max,Fwd Packet Length Min,Fwd Packet Length Mean,Fwd Packet Length Std,Bwd Packet Length Max,Bwd Packet Length Min,Bwd Packet Length Mean,Bwd Packet Length Std,Flow Bytes/s,Flow Packets/s,Flow IAT Mean,Flow IAT Std,Flow IAT Max,Flow IAT Min,Fwd IAT Total,Fwd IAT Mean,Fwd IAT Std,Fwd IAT Max,Fwd IAT Min,Bwd IAT Total,Bwd IAT Mean,Bwd IAT Std,Bwd IAT Max,Bwd IAT Min,Fwd PSH Flags,Fwd URG Flags,Fwd RST Flags,Bwd RST Flags,Fwd Header Length,Bwd Header Length,Fwd Packets/s,Bwd Packets/s,Packet Length Min,Packet Length Max,Packet Length Mean,Packet Length Std,Packet Length Variance,FIN Flag Count,SYN Flag Count,RST Flag Count,PSH Flag Count,ACK Flag Count,URG Flag Count,CWR Flag Count,ECE Flag Count,Down/Up Ratio,Average Packet Size,Fwd Segment Size Avg,Bwd Segment Size Avg,Subflow Fwd Packets,Subflow Fwd Bytes,Subflow Bwd Packets,Subflow Bwd Bytes,FWD Init Win Bytes,Bwd Init Win Bytes,Fwd Act Data Pkts,Fwd Seg Size Min,Active Mean,Active Std,Active Max,Active Min,Idle Mean,Idle Std,Idle Max,Idle Min,ICMP Code,ICMP Type,Total TCP Flow Time""".split(
-    ","
-)
+UNKNOWN_FAMILIES = [
+    "Botnet",
+    "FTP-Patator",
+    "DoS Slowhttptest",
+]
+
+EXPECTED_RESTORED_COLUMNS = [
+    "Attempted Category",
+    "Bwd Bulk Rate Avg",
+    "Bwd Bytes/Bulk Avg",
+    "Bwd PSH Flags",
+    "Bwd Packet/Bulk Avg",
+    "Bwd URG Flags",
+    "Dst IP",
+    "Flow ID",
+    "Fwd Bulk Rate Avg",
+    "Fwd Bytes/Bulk Avg",
+    "Fwd Packet/Bulk Avg",
+    "Src IP",
+    "Src Port",
+    "Timestamp",
+    "id",
+    "is_attempted",
+]
+
+IDENTIFIER_COLUMNS = {
+    "Flow ID",
+    "Src IP",
+    "Dst IP",
+    "Src Port",
+    "Timestamp",
+    "id",
+    "source_file",
+}
+
+LABEL_METADATA_COLUMNS = {
+    "Label",
+    "Attempted Category",
+    "is_attempted",
+    "Original_Label",
+}
+
+# These columns are retained in the exported datasets
+# but excluded from the model input.
+EXCLUDED_MODEL_COLUMNS = {
+    "Dst Port",
+    "Destination Port",
+    "Fwd Header Length.1",
+    "Bwd PSH Flags",
+    "Bwd URG Flags",
+    "Fwd Avg Bytes/Bulk",
+    "Fwd Avg Packets/Bulk",
+    "Fwd Avg Bulk Rate",
+    "Bwd Avg Bytes/Bulk",
+    "Bwd Avg Packets/Bulk",
+    "Bwd Avg Bulk Rate",
+    "Fwd Bytes/Bulk Avg",
+    "Fwd Packet/Bulk Avg",
+    "Fwd Bulk Rate Avg",
+    "Bwd Bytes/Bulk Avg",
+    "Bwd Packet/Bulk Avg",
+    "Bwd Bulk Rate Avg",
+}
+
+NONNEGATIVE_COLUMNS = [
+    "Flow Duration",
+    "Flow Bytes/s",
+    "Flow Packets/s",
+    "Fwd Header Length",
+    "Bwd Header Length",
+    "Fwd Seg Size Min",
+    "min_seg_size_forward",
+]
 
 
-def canonical_label(label):
-    s = re.sub(r"\s+", " ", str(label).strip())
-    s = re.sub(r"^Web Attack\s*[-–—�]\s*", "Web Attack - ", s, flags=re.I)
-    attempted = bool(re.search(r"\s*-\s*Attempted$", s, flags=re.I))
-    s = re.sub(r"\s*-\s*Attempted$", "", s, flags=re.I).strip()
-    alias = {
+# ============================================================
+# 1. PROJECT PATHS
+# ============================================================
+
+ROOT = Path(__file__).resolve().parent
+
+while ROOT.name != "Hybrid-Network-Intrusion-Detection":
+    if ROOT == ROOT.parent:
+        raise RuntimeError("Run this script inside the GC2 repository.")
+    ROOT = ROOT.parent
+
+RAW_DIR = ROOT / "data" / "raw" / "improved_CIC-IDS2017"
+
+OUT_DIR = ROOT / "data" / "processed" / "Data_V3_full"
+
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+if not RAW_DIR.exists():
+    raise FileNotFoundError(f"Improved dataset directory not found: {RAW_DIR}")
+
+print("=" * 70)
+print("GC2 IMPROVED CICIDS2017 - FULL COLUMN PIPELINE")
+print("=" * 70)
+
+print("Input:", RAW_DIR)
+print("Output:", OUT_DIR)
+
+
+# ============================================================
+# 2. LOAD ALL RAW CSV FILES
+# ============================================================
+
+print("\n[1/12] Loading raw improved dataset...")
+
+csv_files = sorted(RAW_DIR.rglob("*.csv"))
+
+if not csv_files:
+    raise FileNotFoundError("No CSV files found in improved dataset directory.")
+
+print("CSV files found:", len(csv_files))
+
+frames = []
+reference_columns = None
+
+for csv_file in csv_files:
+
+    print("Loading:", csv_file.name)
+
+    frame = pd.read_csv(csv_file, low_memory=False)
+
+    frame.columns = frame.columns.astype(str).str.strip()
+
+    if frame.columns.duplicated().any():
+        raise ValueError(f"Duplicate column names in {csv_file.name}")
+
+    current_columns = set(frame.columns)
+
+    if reference_columns is None:
+        reference_columns = current_columns
+
+    elif current_columns != reference_columns:
+        raise ValueError(f"Schema mismatch in {csv_file.name}")
+
+    frame["source_file"] = csv_file.stem
+
+    print(f"Loaded {csv_file.name}: " f"{len(frame):,} rows")
+
+    frames.append(frame)
+
+data = pd.concat(frames, ignore_index=True)
+
+del frames
+gc.collect()
+
+print("\nMerged shape:", data.shape)
+
+if "Label" not in data.columns:
+    raise ValueError("Label column is missing.")
+
+raw_column_names = list(data.columns)
+
+
+# ============================================================
+# 3. STANDARDIZE LABELS
+# ============================================================
+
+print("\n[2/12] Standardizing labels...")
+
+data["Label"] = data["Label"].astype(str).str.strip()
+
+# Preserve original labels for auditing.
+data["Original_Label"] = data["Label"]
+
+
+def normalize_label(label):
+
+    label = str(label).strip()
+
+    label = re.sub(
+        r"^Web Attack\s*[-–—�]\s*", "Web Attack - ", label, flags=re.IGNORECASE
+    )
+
+    label = re.sub(r"\s+", " ", label).strip()
+
+    attempted = bool(re.search(r"\s*-\s*Attempted$", label, flags=re.IGNORECASE))
+
+    base = re.sub(r"\s*-\s*Attempted$", "", label, flags=re.IGNORECASE).strip()
+
+    aliases = {
         "bot": "Botnet",
         "botnet": "Botnet",
-        "ftp-bruteforce": "FTP-Patator",
-        "ftp brute force": "FTP-Patator",
+        "ftp-patator": "FTP-Patator",
         "ftp patator": "FTP-Patator",
-        "dos slowhttp test": "DoS Slowhttptest",
+        "ftp-bruteforce": "FTP-Patator",
+        "ftp-brute force": "FTP-Patator",
         "dos slowhttptest": "DoS Slowhttptest",
+        "dos slowhttp test": "DoS Slowhttptest",
         "dos slow http test": "DoS Slowhttptest",
     }
-    s = alias.get(s.casefold(), s)
-    return s, attempted
+
+    base = aliases.get(base.casefold(), base)
+
+    if attempted:
+        return base + " - Attempted"
+
+    return base
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument(
-        "--input",
-        default="data/raw/improved_CIC-IDS2017",
-        help="Folder containing extracted Improved CICIDS2017 CSV files",
+data["Label"] = data["Label"].map(normalize_label)
+
+print("\nOriginal standardized class distribution:")
+print(data["Label"].value_counts())
+
+
+# ============================================================
+# 4. ATTEMPTED ATTACK HANDLING
+# ============================================================
+
+print("\n[3/12] Auditing attempted attacks...")
+
+attempted_mask = data["Label"].str.contains(r"\s*-\s*Attempted$", case=False, na=False)
+
+if "Attempted Category" in data.columns:
+
+    attempted_category = pd.to_numeric(data["Attempted Category"], errors="coerce")
+
+    attempted_mask |= attempted_category.notna() & attempted_category.ne(-1)
+
+# Preserve attempted status as metadata.
+data["is_attempted"] = attempted_mask.astype(bool)
+
+print("Total attempted records:", int(attempted_mask.sum()))
+
+attempted_audit = data.loc[attempted_mask, "Original_Label"].value_counts()
+
+attempted_audit.to_csv(OUT_DIR / "attempted_audit.csv")
+
+# Identify attempted flows belonging to held-out families.
+base_labels = data["Label"].str.replace(
+    r"\s*-\s*Attempted$", "", regex=True, flags=re.IGNORECASE
+)
+
+attempted_unknown_mask = attempted_mask & base_labels.isin(UNKNOWN_FAMILIES)
+
+print("Attempted held-out-family records:", int(attempted_unknown_mask.sum()))
+
+# Match the previous V3 experiment:
+# attempted flows from known families are treated as BENIGN.
+# attempted flows from unknown families are excluded later.
+data.loc[attempted_mask & ~attempted_unknown_mask, "Label"] = "BENIGN"
+
+# Keep unknown attempted records identifiable until exclusion.
+data.loc[attempted_unknown_mask, "Label"] = base_labels.loc[attempted_unknown_mask]
+
+
+# ============================================================
+# 5. IDENTIFY MODEL FEATURES
+# ============================================================
+
+print("\n[4/12] Defining model features...")
+
+metadata_columns = IDENTIFIER_COLUMNS | LABEL_METADATA_COLUMNS | EXCLUDED_MODEL_COLUMNS
+
+candidate_features = [col for col in data.columns if col not in metadata_columns]
+
+print("Candidate model features:", len(candidate_features))
+
+# Convert only model features to numeric.
+# Original metadata columns remain unchanged.
+for col in candidate_features:
+
+    data[col] = pd.to_numeric(data[col], errors="coerce")
+
+data[candidate_features] = data[candidate_features].replace([np.inf, -np.inf], np.nan)
+
+
+# ============================================================
+# 6. REMOVE INVALID NUMERICAL RECORDS
+# ============================================================
+
+print("\n[5/12] Cleaning invalid numerical values...")
+
+before = len(data)
+
+data = data.dropna(subset=candidate_features).copy()
+
+removed_nonfinite = before - len(data)
+
+print("Nonfinite/missing records removed:", removed_nonfinite)
+
+before = len(data)
+
+for col in NONNEGATIVE_COLUMNS:
+
+    if col in data.columns:
+
+        data = data.loc[data[col] >= 0].copy()
+
+removed_negative = before - len(data)
+
+print("Invalid negative records removed:", removed_negative)
+
+
+# ============================================================
+# 7. REMOVE CONFLICTING LABELS
+# ============================================================
+
+print("\n[6/12] Removing conflicting-label patterns...")
+
+# Keep this consistent with the original V3:
+# duplicate detection is based on modelling features,
+# not identifiers or source metadata.
+
+hashes = pd.util.hash_pandas_object(data[candidate_features], index=False)
+
+label_counts = data.groupby(hashes, sort=False)["Label"].nunique()
+
+conflicting_hashes = label_counts[label_counts > 1].index
+
+before = len(data)
+
+data = data.loc[~hashes.isin(conflicting_hashes)].copy()
+
+removed_conflicts = before - len(data)
+
+print("Conflicting-label records removed:", removed_conflicts)
+
+
+# ============================================================
+# 8. REMOVE DUPLICATE FEATURE VECTORS
+# ============================================================
+
+print("\n[7/12] Removing duplicate feature vectors...")
+
+before = len(data)
+
+data = data.drop_duplicates(subset=candidate_features).copy()
+
+removed_duplicates = before - len(data)
+
+print("Duplicate feature vectors removed:", removed_duplicates)
+
+
+# ============================================================
+# 9. PRESERVE ALL ORIGINAL COLUMNS
+# ============================================================
+
+print("\n[8/12] Preserving full dataset schema...")
+
+# Unlike the previous script, do not drop constant,
+# redundant, identifier, or attempted-category columns.
+# They remain available for auditing and traceability.
+
+missing_original_columns = [col for col in raw_column_names if col not in data.columns]
+
+if missing_original_columns:
+    raise ValueError("Original columns were lost: " + str(missing_original_columns))
+
+# Verify requested restored columns.
+missing_requested = [
+    col for col in EXPECTED_RESTORED_COLUMNS if col not in data.columns
+]
+
+if missing_requested:
+    raise ValueError(
+        "Requested columns missing from raw data: " + str(missing_requested)
     )
-    ap.add_argument("--out", default="data/processed/Data_V3")
-    args = ap.parse_args()
-    source, out = Path(args.input).resolve(), Path(args.out).resolve()
-    if not source.is_dir():
-        raise FileNotFoundError(f"Extracted dataset folder not found: {source}")
-    names = sorted(
-        p
-        for p in source.rglob("*.csv")
-        if not p.name.startswith("._") and "__MACOSX" not in p.parts
-    )
-    if not names:
-        raise ValueError(f"No CSV files found inside {source}")
-    out.mkdir(parents=True, exist_ok=True)
-    print("INPUT FOLDER:", source, "\nOUTPUT:", out, flush=True)
-    print("CSV FILES:", len(names), flush=True)
-    frames = []
-    for path in names:
-        print("Loading:", path.relative_to(source), flush=True)
-        part = pd.read_csv(path, low_memory=False)
-        part.columns = part.columns.astype(str).str.strip()
-        if part.columns.duplicated().any():
-            raise ValueError(f"Duplicate headers: {path}")
-        missing = set(FEATURES + ["Label"]) - set(part.columns)
-        if missing:
-            raise ValueError(
-                f"{path.name}: missing required V15 columns: {sorted(missing)}"
-            )
-        part["source_file"] = path.stem
-        frames.append(part)
-        print(f"Loaded {path.name}: {len(part):,} rows", flush=True)
-    df = pd.concat(frames, ignore_index=True)
-    del frames
-    initial = len(df)
-    print("MERGED:", df.shape, flush=True)
-    canonical = df["Label"].map(canonical_label)
-    df["Label"] = canonical.map(lambda p: p[0])
-    attempted = canonical.map(lambda p: p[1]).to_numpy(dtype=bool)
-    if "Attempted Category" in df.columns:
-        ac = pd.to_numeric(df["Attempted Category"], errors="coerce")
-        attempted |= (ac.notna() & ac.ne(-1)).to_numpy()
-    df["is_attempted"] = attempted
-    print("Original family counts (before attempted policy):")
-    print(df["Label"].value_counts().to_string(), flush=True)
-    print("Attempted rows:", int(attempted.sum()), flush=True)
-    # Audit attempted family before changing labels.
-    audit = pd.crosstab(df["Label"], df["is_attempted"])
-    audit.to_csv(out / "attempted_audit.csv")
-    unknown_family_attempted = df["Label"].isin(UNKNOWN) & df["is_attempted"]
-    excluded_unknown_attempted = int(unknown_family_attempted.sum())
-    df = df.loc[~unknown_family_attempted].copy()
-    df.loc[df["is_attempted"], "Label"] = "BENIGN"
-    required = FEATURES + ["Label", "source_file"]
-    if "Dst Port" in df.columns:
-        required.append("Dst Port")
-    df = df[required].copy()
-    for c in FEATURES:
-        df[c] = pd.to_numeric(df[c], errors="coerce")
-    vals = df[FEATURES].replace([np.inf, -np.inf], np.nan)
-    bad = vals.isna().any(axis=1)
-    removed_nonfinite = int(bad.sum())
-    df = df.loc[~bad].copy()
-    negative_cols = [
-        c
-        for c in [
-            "Flow Duration",
-            "Flow Bytes/s",
-            "Flow Packets/s",
-            "Fwd Header Length",
-            "Bwd Header Length",
-            "Fwd Seg Size Min",
-        ]
-        if c in df
-    ]
-    invalid_negative = (df[negative_cols] < 0).any(axis=1)
-    removed_negative = int(invalid_negative.sum())
-    df = df.loc[~invalid_negative].copy()
 
-    identity = FEATURES + (["Dst Port"] if "Dst Port" in df else [])
-    h = pd.util.hash_pandas_object(df[identity], index=False)
-    label_counts = df.groupby(h, sort=False)["Label"].nunique()
-    bad_hashes = label_counts.index[label_counts > 1]
-    conflict_rows = int(h.isin(bad_hashes).sum())
-    df = df.loc[~h.isin(bad_hashes)].copy()
-    before_dup = len(df)
-    df = df.drop_duplicates(subset=identity).reset_index(drop=True)
-    duplicates = before_dup - len(df)
+print("Original columns preserved:", len(raw_column_names))
+
+print("Current columns:", len(data.columns))
+
+# Remove unknown-family attempted flows from official experiment.
+before = len(data)
+
+data = data.loc[
+    ~data["is_attempted"].eq(True) | ~data["Label"].isin(UNKNOWN_FAMILIES)
+].copy()
+
+removed_unknown_attempted = before - len(data)
+
+print("Excluded attempted held-out-family records:", removed_unknown_attempted)
+
+data = data.reset_index(drop=True)
+
+
+# ============================================================
+# 10. FINAL MODEL FEATURE LIST
+# ============================================================
+
+print("\n[9/12] Finalizing model feature contract...")
+
+# Constant/redundant features remain in the full dataframe,
+# but must not enter model training.
+model_features = [
+    col for col in candidate_features if data[col].nunique(dropna=False) > 1
+]
+
+assert "Label" not in model_features
+assert "source_file" not in model_features
+assert "Attempted Category" not in model_features
+assert "is_attempted" not in model_features
+
+print("Final model features:", len(model_features))
+print("Full dataset columns:", len(data.columns))
+
+print("\nCleaned class distribution:")
+print(data["Label"].value_counts())
+
+
+# ============================================================
+# 11. KNOWN / UNKNOWN SPLITTING
+# ============================================================
+
+print("\n[10/12] Creating known/unknown experiment...")
+
+available_labels = set(data["Label"].unique())
+
+for attack in UNKNOWN_FAMILIES:
+
+    if attack not in available_labels:
+        raise ValueError(f"Unknown attack {attack} not found.")
+
+unknown_df = data.loc[data["Label"].isin(UNKNOWN_FAMILIES)].copy()
+
+known_df = data.loc[~data["Label"].isin(UNKNOWN_FAMILIES)].copy()
+
+assert len(data) == len(known_df) + len(unknown_df)
+
+assert not known_df["Label"].isin(UNKNOWN_FAMILIES).any()
+
+known_train, temp = train_test_split(
+    known_df, test_size=0.30, random_state=SEED, stratify=known_df["Label"]
+)
+
+known_validation, known_test = train_test_split(
+    temp, test_size=0.50, random_state=SEED, stratify=temp["Label"]
+)
+
+ae_train = known_train.loc[known_train["Label"] == "BENIGN"].copy()
+
+ae_validation = known_validation.loc[known_validation["Label"] == "BENIGN"].copy()
+
+print("Known train:", known_train.shape)
+print("Known validation:", known_validation.shape)
+print("Known test:", known_test.shape)
+print("Unknown test:", unknown_df.shape)
+
+print("AE BENIGN train:", ae_train.shape)
+print("AE BENIGN validation:", ae_validation.shape)
+
+
+# ============================================================
+# 12. FINAL VALIDATION
+# ============================================================
+
+print("\n[11/12] Validating outputs...")
+
+assert ae_train["Label"].eq("BENIGN").all()
+assert ae_validation["Label"].eq("BENIGN").all()
+
+assert not known_train["Label"].isin(UNKNOWN_FAMILIES).any()
+
+assert not known_validation["Label"].isin(UNKNOWN_FAMILIES).any()
+
+assert not known_test["Label"].isin(UNKNOWN_FAMILIES).any()
+
+assert set(known_train.index).isdisjoint(known_validation.index)
+
+assert set(known_train.index).isdisjoint(known_test.index)
+
+assert set(known_validation.index).isdisjoint(known_test.index)
+
+assert data[model_features].isna().sum().sum() == 0
+
+assert np.isfinite(data[model_features].to_numpy(dtype=np.float64)).all()
+
+print("All validation checks passed.")
+
+
+# ============================================================
+# 13. SAVE ALL OUTPUTS
+# ============================================================
+
+print("\n[12/12] Saving datasets...")
+
+outputs = {
+    "clean_master": data,
+    "known_train": known_train,
+    "known_validation": known_validation,
+    "known_test": known_test,
+    "unknown_test": unknown_df,
+    "autoencoder_benign_train": ae_train,
+    "autoencoder_benign_validation": ae_validation,
+}
+
+for name, frame in outputs.items():
+
+    path = OUT_DIR / f"{name}.parquet"
+
+    frame.to_parquet(path, index=False)
+
     print(
-        "Removed nonfinite:",
-        removed_nonfinite,
-        "invalid negatives:",
-        removed_negative,
-        "conflicting rows:",
-        conflict_rows,
-        "duplicates:",
-        duplicates,
-        flush=True,
+        f"Saved {name}.parquet: "
+        f"{len(frame):,} rows x "
+        f"{len(frame.columns)} columns"
     )
-    print(
-        "Excluded attempted held-out-family rows:",
-        excluded_unknown_attempted,
-        flush=True,
-    )
-    print("CLEAN:", df.shape, "\n", df["Label"].value_counts().to_string(), flush=True)
-    absent = sorted(set(UNKNOWN) - set(df["Label"]))
-    if absent:
-        raise ValueError(f"Unknown families absent after cleaning: {absent}")
-    known = df.loc[~df["Label"].isin(UNKNOWN)].copy()
-    unknown = df.loc[df["Label"].isin(UNKNOWN)].copy()
-    if "BENIGN" not in set(known["Label"]):
-        raise ValueError("No BENIGN rows")
-    train, remainder = train_test_split(
-        known, test_size=0.30, stratify=known["Label"], random_state=SEED
-    )
-    val, test = train_test_split(
-        remainder, test_size=0.50, stratify=remainder["Label"], random_state=SEED
-    )
-    ae_train = train.loc[train["Label"].eq("BENIGN")]
-    ae_val = val.loc[val["Label"].eq("BENIGN")]
-    for name, frame in [
-        ("known_train", train),
-        ("known_validation", val),
-        ("known_test", test),
-        ("unknown_test", unknown),
-        ("autoencoder_benign_train", ae_train),
-        ("autoencoder_benign_validation", ae_val),
-    ]:
-        path = out / (name + ".parquet")
-        frame.to_parquet(path, index=False)
-        print("SAVED", path.name, frame.shape, flush=True)
 
-    (out / "feature_list.json").write_text(json.dumps(FEATURES, indent=2))
-    counts = (
-        pd.concat(
-            {
-                "train": train["Label"].value_counts(),
-                "validation": val["Label"].value_counts(),
-                "test": test["Label"].value_counts(),
-                "unknown_test": unknown["Label"].value_counts(),
-            },
-            axis=1,
-        )
-        .fillna(0)
-        .astype(int)
+with open(OUT_DIR / "feature_list.json", "w") as f:
+
+    json.dump(model_features, f, indent=2)
+
+config = {
+    "dataset": "Improved CICIDS2017",
+    "version": "Data_V3_full",
+    "seed": SEED,
+    "unknown_classes": UNKNOWN_FAMILIES,
+    "known_classes": sorted(known_df["Label"].unique().tolist()),
+    "attempted_policy": (
+        "Known-family attempted flows relabelled BENIGN; "
+        "unknown-family attempted flows excluded"
+    ),
+    "full_column_count": len(data.columns),
+    "model_feature_count": len(model_features),
+    "split_ratio": [0.70, 0.15, 0.15],
+}
+
+with open(OUT_DIR / "experiment_config.json", "w") as f:
+
+    json.dump(config, f, indent=2)
+
+split_summary = (
+    pd.concat(
+        {
+            "Train": known_train["Label"].value_counts(),
+            "Validation": known_validation["Label"].value_counts(),
+            "Test": known_test["Label"].value_counts(),
+            "Unknown_test": unknown_df["Label"].value_counts(),
+        },
+        axis=1,
     )
-    counts.to_csv(out / "split_summary.csv")
-    config = {
-        "dataset": "Improved CICIDS2017",
-        "seed": SEED,
-        "unknown_families": list(UNKNOWN),
-        "attempted_policy": "Non-held-out attempted flows relabeled BENIGN; attempted flows of held-out families excluded",
-        "v15_expected_features": len(FEATURES),
-        "known_rows": len(known),
-        "unknown_rows": len(unknown),
-        "clean_rows": len(df),
-        "raw_rows": initial,
-        "excluded_unknown_family_attempted": excluded_unknown_attempted,
-        "requires_v15_retraining": True,
-        "note": "Do not reuse V15 model/scaler/threshold on new splits without proof of identical fit data.",
+    .fillna(0)
+    .astype(int)
+)
+
+split_summary.to_csv(OUT_DIR / "split_summary.csv")
+
+# Save full schema for auditing.
+pd.DataFrame(
+    {
+        "Column": data.columns,
+        "Used_for_ML": [col in model_features for col in data.columns],
+        "Data_type": [str(data[col].dtype) for col in data.columns],
     }
-    (out / "experiment_config.json").write_text(json.dumps(config, indent=2))
-    assert not any(
-        x in set(train["Label"]) or x in set(val["Label"]) or x in set(test["Label"])
-        for x in UNKNOWN
-    )
-    assert (
-        set(train.index).isdisjoint(set(val.index))
-        and set(train.index).isdisjoint(set(test.index))
-        and set(val.index).isdisjoint(set(test.index))
-    )
-    assert np.isfinite(df[FEATURES].to_numpy(dtype=np.float64)).all()
-    print(
-        "\nSUCCESS: GC2 shared Improved CICIDS2017 data prepared. V15 retraining required for this split.",
-        flush=True,
-    )
+).to_csv(OUT_DIR / "column_schema.csv", index=False)
 
+print("\n" + "=" * 70)
+print("GC2 DATA_V3_FULL PIPELINE COMPLETED")
+print("=" * 70)
 
-if __name__ == "__main__":
-    main()
+print("Final records:", len(data))
+print("Full columns:", len(data.columns))
+print("Model features:", len(model_features))
+print("Known classes:", known_df["Label"].nunique())
+print("Unknown classes:", unknown_df["Label"].nunique())
+print("Output folder:", OUT_DIR)
+
+print("\nIMPORTANT:")
+print(
+    "All original columns are retained for auditing. "
+    "Models must use feature_list.json, not every column."
+)
