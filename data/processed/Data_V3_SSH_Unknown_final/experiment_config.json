@@ -1,0 +1,40 @@
+{
+  "dataset": "Improved CICIDS2017",
+  "version": "Data_V3_SSH_Unknown_final",
+  "seed": 42,
+  "unknown_classes": [
+    "SSH-Patator",
+    "FTP-Patator",
+    "DoS Slowhttptest"
+  ],
+  "known_classes": [
+    "BENIGN",
+    "Botnet",
+    "DDoS",
+    "DoS GoldenEye",
+    "DoS Hulk",
+    "DoS Slowloris",
+    "Heartbleed",
+    "Infiltration",
+    "Infiltration - Portscan",
+    "Portscan",
+    "Web Attack - Brute Force",
+    "Web Attack - SQL Injection",
+    "Web Attack - XSS"
+  ],
+  "split": [
+    0.7,
+    0.15,
+    0.15
+  ],
+  "attempted_policy": "Known-family attempted relabelled BENIGN; unknown-family attempted excluded; AE training uses originally BENIGN only",
+  "full_column_count": 94,
+  "model_feature_count": 74,
+  "raw_rows": 2099976,
+  "clean_rows": 1828595,
+  "removed_nonfinite": 5,
+  "removed_invalid_negative": 593,
+  "excluded_unknown_attempted": 3407,
+  "removed_conflicts": 14140,
+  "removed_duplicates": 253236
+}
