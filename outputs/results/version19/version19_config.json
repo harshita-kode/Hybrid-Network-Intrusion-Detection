@@ -1,0 +1,10 @@
+{
+  "model_source": "C:\\Users\\saaral\\Desktop\\gc\\pattern recog\\project\\]code\\Hybrid-Network-Intrusion-Detection\\saved-models\\version18_ssh_unknown",
+  "data_source": "C:\\Users\\saaral\\Desktop\\gc\\pattern recog\\project\\]code\\Hybrid-Network-Intrusion-Detection\\data\\processed\\Data_V3_SSH_Unknown_final",
+  "feature_quantile": 0.99,
+  "target_fpr": 0.03,
+  "epsilon": 1e-08,
+  "feature_wise_threshold": 4.725084333590782,
+  "v18_mse_threshold": 0.05305604353547096,
+  "warning": "Exploratory evaluation: held-out classes were examined in previous experiments."
+}

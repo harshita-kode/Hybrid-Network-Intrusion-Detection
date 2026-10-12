@@ -31,10 +31,10 @@
   "full_column_count": 94,
   "model_feature_count": 74,
   "raw_rows": 2099976,
-  "clean_rows": 1828595,
+  "clean_rows": 1828594,
   "removed_nonfinite": 5,
   "removed_invalid_negative": 593,
   "excluded_unknown_attempted": 3407,
   "removed_conflicts": 14140,
-  "removed_duplicates": 253236
+  "removed_duplicates": 253237
 }
