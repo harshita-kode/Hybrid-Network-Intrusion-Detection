@@ -1,7 +1,0 @@
-Method,Attack,Samples,Detected,Recall
-Global,Botnet,736,685,0.9307065217391305
-Global,DoS Slowhttptest,1740,1737,0.9982758620689656
-Global,FTP-Patator,3972,3968,0.998992950654582
-Port_Group_Global,Botnet,736,46,0.0625
-Port_Group_Global,DoS Slowhttptest,1740,1737,0.9982758620689656
-Port_Group_Global,FTP-Patator,3972,3968,0.998992950654582
