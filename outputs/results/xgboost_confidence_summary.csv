@@ -1,0 +1,10 @@
+metric,value
+confidence_threshold,0.95
+total_test_samples,375924.0
+high_confidence_samples,375317.0
+low_confidence_samples,607.0
+routing_percentage,0.16146880752492526
+total_classification_errors,216.0
+errors_caught,129.0
+correct_samples_routed,478.0
+error_capture_rate,59.72222222222222

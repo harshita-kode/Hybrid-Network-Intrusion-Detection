@@ -1,4 +1,18 @@
-data/raw/*.DS_Store
+
+data/processed/Data_V2
+data/processed/*.csv
+data/raw/*.csv
+data/processed/*
+data/raw/*data/raw/*.DS_Store
+data/processed/Data_V3_SSH_Unknown_final/*.csv
+data/processed/Data_V3_SSH_Unknown_final/*.parquet
+data/processed/*.csv
+data/processed/
+data/processed/unknown_detection/*.csv
+
+notebooks/exploration/*.csv
+notebooks/exploration/*.parquet
 
 .DS_Store
 data/raw/*.csv
+data/raw/improved_CIC-IDS2017/*.csv
