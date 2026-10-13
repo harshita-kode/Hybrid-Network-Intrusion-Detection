@@ -1,0 +1,25 @@
+Method,Attack,Samples,Detected,Recall
+Global,DDoS,14272,14272,1.0
+Global,DoS GoldenEye,1135,1059,0.9330396475770925
+Global,DoS Hulk,23771,21530,0.9057254638004291
+Global,DoS Slowloris,579,579,1.0
+Global,Heartbleed,1,1,1.0
+Global,Infiltration,4,4,1.0
+Global,Infiltration - Portscan,5522,5373,0.9730170228178197
+Global,Portscan,12937,12379,0.9568678982762618
+Global,SSH-Patator,444,12,0.02702702702702703
+Global,Web Attack - Brute Force,11,11,1.0
+Global,Web Attack - SQL Injection,2,0,0.0
+Global,Web Attack - XSS,2,2,1.0
+Port_Group_Global,DDoS,14272,14272,1.0
+Port_Group_Global,DoS GoldenEye,1135,1057,0.9312775330396476
+Port_Group_Global,DoS Hulk,23771,21483,0.9037482646922721
+Port_Group_Global,DoS Slowloris,579,579,1.0
+Port_Group_Global,Heartbleed,1,1,1.0
+Port_Group_Global,Infiltration,4,4,1.0
+Port_Group_Global,Infiltration - Portscan,5522,823,0.1490402028250634
+Port_Group_Global,Portscan,12937,951,0.07351008734637088
+Port_Group_Global,SSH-Patator,444,12,0.02702702702702703
+Port_Group_Global,Web Attack - Brute Force,11,11,1.0
+Port_Group_Global,Web Attack - SQL Injection,2,0,0.0
+Port_Group_Global,Web Attack - XSS,2,2,1.0
