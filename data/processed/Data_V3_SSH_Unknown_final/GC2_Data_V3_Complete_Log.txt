@@ -3,7 +3,7 @@ GC2 - IMPROVED CIC-IDS2017
 COMPLETE DATA PREPROCESSING AND DATASET DOCUMENTATION
 ================================================================================
 
-Generated: 2026-10-11 13:54:53
+Generated: 2026-10-12 20:35:43
 
 DATASET VERSION:
 Data_V3_SSH_Unknown_final
@@ -12,10 +12,10 @@ SOURCE DATASET:
 Improved CIC-IDS2017
 
 SOURCE DIRECTORY:
-/Users/anaghamohan/Desktop/GC2/Hybrid-Network-Intrusion-Detection/data/raw/improved_CIC-IDS2017
+C:\Users\saaral\Desktop\gc\pattern recog\project\]code\Hybrid-Network-Intrusion-Detection\data\raw\improved_CIC-IDS2017
 
 OUTPUT DIRECTORY:
-/Users/anaghamohan/Desktop/GC2/Hybrid-Network-Intrusion-Detection/data/processed/Data_V3_SSH_Unknown_final
+C:\Users\saaral\Desktop\gc\pattern recog\project\]code\Hybrid-Network-Intrusion-Detection\data\processed\Data_V3_SSH_Unknown_final
 
 ================================================================================
 1. ORIGINAL SOURCE FILES
@@ -37,13 +37,13 @@ Removed NaN/Inf: 5
 Removed invalid negatives: 593
 Excluded attempted unknown-family: 3407
 Removed conflicting labels: 14140
-Removed duplicate feature vectors: 253236
+Removed duplicate feature vectors: 253237
 
-Final clean records: 1828595
+Final clean records: 1828594
 Final columns: 94
 Model features: 74
 
-Total removed: 271381
+Total removed: 271382
 Retention percentage: 87.0769 %
 
 ================================================================================
@@ -71,7 +71,7 @@ KNOWN ATTACK CLASSES:
 - Web Attack - XSS
 
 Unknown attack records: 8673
-Known records: 1819922
+Known records: 1819921
 
 ================================================================================
 4. GENERATED DATASETS
@@ -83,12 +83,12 @@ FILE: clean_master.parquet
 Purpose:
 Complete cleaned Improved CICIDS2017 dataset.
 
-Rows: 1828595
+Rows: 1828594
 Columns: 94
 
 LABEL DISTRIBUTION:
 Label
-BENIGN                        1430949
+BENIGN                        1430948
 DoS Hulk                       158468
 DDoS                            95144
 Portscan                        86245
@@ -107,13 +107,13 @@ Heartbleed                          8
 
 ALL COLUMNS:
 001. id [int64]
-002. Flow ID [object]
-003. Src IP [object]
+002. Flow ID [str]
+003. Src IP [str]
 004. Src Port [int64]
-005. Dst IP [object]
+005. Dst IP [str]
 006. Dst Port [int64]
 007. Protocol [int64]
-008. Timestamp [object]
+008. Timestamp [str]
 009. Flow Duration [int64]
 010. Total Fwd Packet [int64]
 011. Total Bwd packets [int64]
@@ -195,10 +195,10 @@ ALL COLUMNS:
 087. ICMP Code [int64]
 088. ICMP Type [int64]
 089. Total TCP Flow Time [int64]
-090. Label [object]
+090. Label [str]
 091. Attempted Category [int64]
-092. source_file [object]
-093. Original_Label [object]
+092. source_file [str]
+093. Original_Label [str]
 094. is_attempted [bool]
 
 MODEL FEATURES PRESENT:
@@ -289,12 +289,12 @@ FILE: known_train.parquet
 Purpose:
 XGBoost supervised training dataset.
 
-Rows: 1273945
+Rows: 1273944
 Columns: 94
 
 LABEL DISTRIBUTION:
 Label
-BENIGN                        1001664
+BENIGN                        1001663
 DoS Hulk                       110927
 DDoS                            66601
 Portscan                        60371
@@ -310,13 +310,13 @@ Heartbleed                          6
 
 ALL COLUMNS:
 001. id [int64]
-002. Flow ID [object]
-003. Src IP [object]
+002. Flow ID [str]
+003. Src IP [str]
 004. Src Port [int64]
-005. Dst IP [object]
+005. Dst IP [str]
 006. Dst Port [int64]
 007. Protocol [int64]
-008. Timestamp [object]
+008. Timestamp [str]
 009. Flow Duration [int64]
 010. Total Fwd Packet [int64]
 011. Total Bwd packets [int64]
@@ -398,10 +398,10 @@ ALL COLUMNS:
 087. ICMP Code [int64]
 088. ICMP Type [int64]
 089. Total TCP Flow Time [int64]
-090. Label [object]
+090. Label [str]
 091. Attempted Category [int64]
-092. source_file [object]
-093. Original_Label [object]
+092. source_file [str]
+093. Original_Label [str]
 094. is_attempted [bool]
 
 MODEL FEATURES PRESENT:
@@ -484,7 +484,7 @@ Missing model features:
 None
 
 Attempted records:
-3968
+3990
 
 ----------------------------------------------------------------------
 FILE: known_validation.parquet
@@ -513,13 +513,13 @@ Heartbleed                         1
 
 ALL COLUMNS:
 001. id [int64]
-002. Flow ID [object]
-003. Src IP [object]
+002. Flow ID [str]
+003. Src IP [str]
 004. Src Port [int64]
-005. Dst IP [object]
+005. Dst IP [str]
 006. Dst Port [int64]
 007. Protocol [int64]
-008. Timestamp [object]
+008. Timestamp [str]
 009. Flow Duration [int64]
 010. Total Fwd Packet [int64]
 011. Total Bwd packets [int64]
@@ -601,10 +601,10 @@ ALL COLUMNS:
 087. ICMP Code [int64]
 088. ICMP Type [int64]
 089. Total TCP Flow Time [int64]
-090. Label [object]
+090. Label [str]
 091. Attempted Category [int64]
-092. source_file [object]
-093. Original_Label [object]
+092. source_file [str]
+093. Original_Label [str]
 094. is_attempted [bool]
 
 MODEL FEATURES PRESENT:
@@ -687,7 +687,7 @@ Missing model features:
 None
 
 Attempted records:
-853
+833
 
 ----------------------------------------------------------------------
 FILE: known_test.parquet
@@ -716,13 +716,13 @@ Heartbleed                         1
 
 ALL COLUMNS:
 001. id [int64]
-002. Flow ID [object]
-003. Src IP [object]
+002. Flow ID [str]
+003. Src IP [str]
 004. Src Port [int64]
-005. Dst IP [object]
+005. Dst IP [str]
 006. Dst Port [int64]
 007. Protocol [int64]
-008. Timestamp [object]
+008. Timestamp [str]
 009. Flow Duration [int64]
 010. Total Fwd Packet [int64]
 011. Total Bwd packets [int64]
@@ -804,10 +804,10 @@ ALL COLUMNS:
 087. ICMP Code [int64]
 088. ICMP Type [int64]
 089. Total TCP Flow Time [int64]
-090. Label [object]
+090. Label [str]
 091. Attempted Category [int64]
-092. source_file [object]
-093. Original_Label [object]
+092. source_file [str]
+093. Original_Label [str]
 094. is_attempted [bool]
 
 MODEL FEATURES PRESENT:
@@ -890,7 +890,7 @@ Missing model features:
 None
 
 Attempted records:
-878
+876
 
 ----------------------------------------------------------------------
 FILE: unknown_test.parquet
@@ -909,13 +909,13 @@ DoS Slowhttptest    1740
 
 ALL COLUMNS:
 001. id [int64]
-002. Flow ID [object]
-003. Src IP [object]
+002. Flow ID [str]
+003. Src IP [str]
 004. Src Port [int64]
-005. Dst IP [object]
+005. Dst IP [str]
 006. Dst Port [int64]
 007. Protocol [int64]
-008. Timestamp [object]
+008. Timestamp [str]
 009. Flow Duration [int64]
 010. Total Fwd Packet [int64]
 011. Total Bwd packets [int64]
@@ -997,10 +997,10 @@ ALL COLUMNS:
 087. ICMP Code [int64]
 088. ICMP Type [int64]
 089. Total TCP Flow Time [int64]
-090. Label [object]
+090. Label [str]
 091. Attempted Category [int64]
-092. source_file [object]
-093. Original_Label [object]
+092. source_file [str]
+093. Original_Label [str]
 094. is_attempted [bool]
 
 MODEL FEATURES PRESENT:
@@ -1091,22 +1091,22 @@ FILE: autoencoder_benign_train.parquet
 Purpose:
 BENIGN-only Autoencoder training.
 
-Rows: 997696
+Rows: 997673
 Columns: 94
 
 LABEL DISTRIBUTION:
 Label
-BENIGN    997696
+BENIGN    997673
 
 ALL COLUMNS:
 001. id [int64]
-002. Flow ID [object]
-003. Src IP [object]
+002. Flow ID [str]
+003. Src IP [str]
 004. Src Port [int64]
-005. Dst IP [object]
+005. Dst IP [str]
 006. Dst Port [int64]
 007. Protocol [int64]
-008. Timestamp [object]
+008. Timestamp [str]
 009. Flow Duration [int64]
 010. Total Fwd Packet [int64]
 011. Total Bwd packets [int64]
@@ -1188,10 +1188,10 @@ ALL COLUMNS:
 087. ICMP Code [int64]
 088. ICMP Type [int64]
 089. Total TCP Flow Time [int64]
-090. Label [object]
+090. Label [str]
 091. Attempted Category [int64]
-092. source_file [object]
-093. Original_Label [object]
+092. source_file [str]
+093. Original_Label [str]
 094. is_attempted [bool]
 
 MODEL FEATURES PRESENT:
@@ -1282,22 +1282,22 @@ FILE: autoencoder_benign_validation.parquet
 Purpose:
 BENIGN-only Autoencoder threshold calibration.
 
-Rows: 213789
+Rows: 213809
 Columns: 94
 
 LABEL DISTRIBUTION:
 Label
-BENIGN    213789
+BENIGN    213809
 
 ALL COLUMNS:
 001. id [int64]
-002. Flow ID [object]
-003. Src IP [object]
+002. Flow ID [str]
+003. Src IP [str]
 004. Src Port [int64]
-005. Dst IP [object]
+005. Dst IP [str]
 006. Dst Port [int64]
 007. Protocol [int64]
-008. Timestamp [object]
+008. Timestamp [str]
 009. Flow Duration [int64]
 010. Total Fwd Packet [int64]
 011. Total Bwd packets [int64]
@@ -1379,10 +1379,10 @@ ALL COLUMNS:
 087. ICMP Code [int64]
 088. ICMP Type [int64]
 089. Total TCP Flow Time [int64]
-090. Label [object]
+090. Label [str]
 091. Attempted Category [int64]
-092. source_file [object]
-093. Original_Label [object]
+092. source_file [str]
+093. Original_Label [str]
 094. is_attempted [bool]
 
 MODEL FEATURES PRESENT:
@@ -1581,19 +1581,19 @@ Excluded metadata columns:
 6. TRAIN / VALIDATION / TEST SPLIT
 ================================================================================
 
-Known training: 1273945
+Known training: 1273944
 Known validation: 272988
 Known testing: 272989
 
-Autoencoder BENIGN training: 997696
-Autoencoder BENIGN validation: 213789
+Autoencoder BENIGN training: 997673
+Autoencoder BENIGN validation: 213809
 
 Unknown attack testing: 8673
 
 CLASS-WISE SPLIT SUMMARY:
                               Train  Validation    Test  Unknown_test
 Label                                                                
-BENIGN                      1001664      214642  214643             0
+BENIGN                      1001663      214642  214643             0
 DoS Hulk                     110927       23770   23771             0
 DDoS                          66601       14271   14272             0
 Portscan                      60371       12937   12937             0

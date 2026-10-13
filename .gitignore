@@ -1,6 +1,7 @@
 data/raw/*.DS_Store
 data/processed/Data_V3_SSH_Unknown_final/*.csv
 data/processed/Data_V3_SSH_Unknown_final/*.parquet
+data/processed
 
 
 notebooks/exploration/*.csv
