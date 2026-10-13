@@ -2,3 +2,5 @@
 data/processed/Data_V2
 data/processed/*.csv
 data/raw/*.csv
+data/processed/*
+data/raw/*
