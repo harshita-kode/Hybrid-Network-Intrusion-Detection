@@ -1,4 +1,0 @@
-actual_unknown_class,samples,low_confidence_count,accepted_benign_count,accepted_known_attack_count,mean_confidence,median_confidence,low_confidence_rate,accepted_benign_rate
-DoS Slowhttptest,1740,497,166,1077,0.9172447235933665,0.9991402626037598,0.28563218390804596,0.09540229885057472
-FTP-Patator,3972,3,3969,0,0.9997735969339613,0.9998825788497925,0.0007552870090634441,0.9992447129909365
-SSH-Patator,2961,0,2961,0,0.9999908596146393,0.9999912977218628,0.0,1.0

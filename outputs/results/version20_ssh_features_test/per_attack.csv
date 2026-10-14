@@ -1,7 +1,0 @@
-Method,Attack,Samples,Detected,Recall
-Global,DoS Slowhttptest,1740,1633,0.9385057471264368
-Global,FTP-Patator,3972,3957,0.9962235649546828
-Global,SSH-Patator,2961,2961,1.0
-Port_Group_Global,DoS Slowhttptest,1740,1636,0.9402298850574713
-Port_Group_Global,FTP-Patator,3972,3957,0.9962235649546828
-Port_Group_Global,SSH-Patator,2961,2951,0.9966227625802094

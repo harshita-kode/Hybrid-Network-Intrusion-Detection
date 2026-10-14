@@ -1,5 +1,0 @@
-actual_label,samples,xgb_high_conf_benign,kb_matches,kb_or_ae_signals,original_review_flags,shadow_review_flags
-BENIGN,1301,1301,0,33,0,33
-DoS Slowhttptest,261,28,234,258,75,100
-FTP-Patator,596,596,586,596,0,596
-SSH-Patator,444,444,423,444,0,444
