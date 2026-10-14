@@ -81,6 +81,74 @@ def _json_safe(value):
     )
 
 
+def validate_detection_consistency(status, evidence):
+    """
+    Reject contradictory routing evidence.
+
+    Missing evidence is allowed at this stage.
+    Complete evidence requirements will be checked
+    separately during full pipeline integration.
+    """
+
+    def optional_bool(name):
+        value = evidence.get(name)
+
+        if value is not None and type(value) is not bool:
+            raise TypeError(
+                f"{name} must be a boolean or None"
+            )
+
+        return value
+
+    kb_matched = optional_bool("kb_matched")
+    ae_anomalous = optional_bool("ae_anomalous")
+    ae_called = optional_bool("ae_called")
+    kb_updated = optional_bool("kb_updated")
+
+    if kb_matched is True and ae_called is True:
+        raise ValueError(
+            "Autoencoder must not run after a KB match"
+        )
+
+    if kb_matched is True and ae_anomalous is not None:
+        raise ValueError(
+            "Autoencoder result provided for KB-matched flow"
+        )
+
+    if kb_matched is True and kb_updated is True:
+        raise ValueError(
+            "A KB-matched flow should not trigger new insertion"
+        )
+
+    if kb_updated is True and (
+        kb_matched is not False
+        or ae_anomalous is not True
+    ):
+        raise ValueError(
+            "KB insertion requires KB miss and AE anomaly"
+        )
+
+    if status == "PREVIOUSLY_LEARNED_UNKNOWN":
+        if kb_matched is False:
+            raise ValueError(
+                "Previously learned unknown requires KB match"
+            )
+
+    if status == "POTENTIAL_NEW_UNKNOWN":
+        if kb_matched is True or ae_anomalous is False:
+            raise ValueError(
+                "Potential new unknown requires KB miss "
+                "and positive anomaly evidence"
+            )
+
+    if status == "UNCERTAIN":
+        if kb_matched is True or ae_anomalous is True:
+            raise ValueError(
+                "Uncertain status conflicts with "
+                "positive KB or AE evidence"
+            )
+
+
 def generate_alert(
     alert_id: str,
     detection_status: str,
@@ -116,6 +184,11 @@ def generate_alert(
 
     if not isinstance(evidence, dict):
         raise TypeError("evidence must be a dictionary")
+
+    validate_detection_consistency(
+        detection_status,
+        evidence
+    )
 
     if explanations is None:
         explanations = []
