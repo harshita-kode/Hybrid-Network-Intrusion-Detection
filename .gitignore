@@ -1,8 +1,11 @@
 data/raw/*.DS_Store
 data/processed/Data_V3_SSH_Unknown_final/*.csv
 data/processed/Data_V3_SSH_Unknown_final/*.parquet
+data/processed/Data_V3_SSH_Unknown_final/unknown_kb_splits
 
-
+data/processed/Data_V3
+data/processed/Data_V3_full
+data/processed/Data_V2
 notebooks/exploration/*.csv
 notebooks/exploration/*.parquet
 
