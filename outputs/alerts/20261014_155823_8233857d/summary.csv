@@ -1,2 +1,0 @@
-alert_id,shadow_status,decision_changed,requires_review,detection_status,predicted_class,confidence,kb_matched,ae_anomalous,risk_score,risk_decision,nearest_historical_attack,historical_distance,kb_candidate_id,kb_candidate_status,shadow_kb_matched,shadow_kb_pattern_id,shadow_kb_distance
-GC2-000001,NOT_SCREENED,False,False,KNOWN_ATTACK,DDoS,0.9999960660934448,,,,NOT_AVAILABLE,DoS Hulk,56.67230364119673,,,,,

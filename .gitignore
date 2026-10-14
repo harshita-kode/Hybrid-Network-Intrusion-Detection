@@ -16,3 +16,11 @@ notebooks/exploration/*.parquet
 .DS_Store
 data/raw/*.csv
 data/raw/improved_CIC-IDS2017/*.csv
+outputs/alerts
+
+*.sqlite3
+*.sqlite3-shm
+*.sqlite3-wal
+
+.venv/
+venv/

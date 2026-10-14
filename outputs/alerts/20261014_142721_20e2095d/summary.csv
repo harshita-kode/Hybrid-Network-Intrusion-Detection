@@ -1,2 +1,0 @@
-alert_id,detection_status,predicted_class,confidence,kb_matched,ae_anomalous,risk_score,risk_decision,nearest_historical_attack,historical_distance
-GC2-000001,POTENTIAL_NEW_UNKNOWN,BENIGN,0.34774988889694214,False,True,,NOT_AVAILABLE,DoS Hulk,307.5891917667436
