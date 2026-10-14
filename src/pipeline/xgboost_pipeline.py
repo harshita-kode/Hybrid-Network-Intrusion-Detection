@@ -152,14 +152,18 @@ def prepare_data(train, validation, test):
     LABEL_COLUMN = "Label"
 
     columns_to_drop = [
-        "Label",
-        "source_file",
-        "Flow ID",
-        "Src IP",
-        "Dst IP",
-        "Timestamp",
-        "Original_Label"
-    ]
+    "Label",
+    "source_file",
+    "Flow ID",
+    "Src IP",
+    "Dst IP",
+    "Timestamp",
+    "Original_Label",
+    "id",
+    "Attempted Category",
+    "is_attempted"
+]
+
 
     # Remove metadata and identifiers
     X_train = train.drop(

@@ -1,6 +1,7 @@
 metric,value
 confidence_threshold,0.95
 total_test_samples,272989.0
+<<<<<<< HEAD
 high_confidence_samples,272791.0
 low_confidence_samples,198.0
 routing_percentage,0.07253039499760064
@@ -8,3 +9,12 @@ total_classification_errors,70.0
 errors_caught,55.0
 correct_samples_routed,143.0
 error_capture_rate,78.57142857142857
+=======
+high_confidence_samples,272472.0
+low_confidence_samples,517.0
+routing_percentage,0.18938492027151277
+total_classification_errors,150.0
+errors_caught,127.0
+correct_samples_routed,390.0
+error_capture_rate,84.66666666666667
+>>>>>>> 8bc8039a01b2077197370526a7ffd7b92f9bf33b
