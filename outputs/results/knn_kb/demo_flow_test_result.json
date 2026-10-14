@@ -21,7 +21,7 @@
       },
       {
         "pattern_id": "KB_0000038",
-        "distance": 1.178304427864039
+        "distance": 1.178304427864033
       },
       {
         "pattern_id": "KB_0001099",
@@ -29,12 +29,12 @@
       },
       {
         "pattern_id": "KB_0005184",
-        "distance": 1.1849142895004645
+        "distance": 1.1849142895004614
       }
     ]
   },
   "ae_mse": 0.5278878062963486,
   "ae_threshold": 0.046787647058566334,
   "prior_flows": 4114,
-  "inserted_pattern_id": "KB_8a6010ab0db84e02"
+  "inserted_pattern_id": "KB_6dd6f8d25f124c32"
 }

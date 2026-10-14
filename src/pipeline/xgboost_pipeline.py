@@ -40,7 +40,7 @@ DATA_DIR = os.path.join(
     PROJECT_ROOT,
     "data",
     "processed",
-    "Data_V2"
+    "Data_V3_SSH_Unknown_final"
 )
 
 RESULT_DIR = os.path.join(
@@ -74,7 +74,7 @@ METADATA_COLUMNS = ["source_file"]
 
 def load_data():
 
-    print("Loading Data_V2 datasets...")
+    print("Loading Data_V3_SSH_Unknown_Final datasets...")
 
     train = pd.read_parquet(
         os.path.join(
@@ -109,34 +109,94 @@ def load_data():
 # PREPARE DATA
 # ============================================================
 
-def prepare_data(
-    train,
-    validation,
-    test
-):
+# def prepare_data(
+#     train,
+#     validation,
+#     test
+# ):
+
+#     columns_to_drop = [
+#         LABEL_COLUMN,
+#         *METADATA_COLUMNS
+#     ]
+
+#     X_train = train.drop(
+#         columns=columns_to_drop
+#     )
+
+#     y_train = train[LABEL_COLUMN]
+
+#     X_validation = validation.drop(
+#         columns=columns_to_drop
+#     )
+
+#     y_validation = validation[LABEL_COLUMN]
+
+#     X_test = test.drop(
+#         columns=columns_to_drop
+#     )
+
+#     y_test = test[LABEL_COLUMN]
+
+#     return (
+#         X_train,
+#         y_train,
+#         X_validation,
+#         y_validation,
+#         X_test,
+#         y_test
+#     )
+
+def prepare_data(train, validation, test):
+
+    LABEL_COLUMN = "Label"
 
     columns_to_drop = [
-        LABEL_COLUMN,
-        *METADATA_COLUMNS
+        "Label",
+        "source_file",
+        "Flow ID",
+        "Src IP",
+        "Dst IP",
+        "Timestamp",
+        "Original_Label"
     ]
 
+    # Remove metadata and identifiers
     X_train = train.drop(
-        columns=columns_to_drop
+        columns=columns_to_drop,
+        errors="ignore"
     )
-
-    y_train = train[LABEL_COLUMN]
 
     X_validation = validation.drop(
-        columns=columns_to_drop
+        columns=columns_to_drop,
+        errors="ignore"
     )
-
-    y_validation = validation[LABEL_COLUMN]
 
     X_test = test.drop(
-        columns=columns_to_drop
+        columns=columns_to_drop,
+        errors="ignore"
     )
 
+    # Extract target labels
+    y_train = train[LABEL_COLUMN]
+    y_validation = validation[LABEL_COLUMN]
     y_test = test[LABEL_COLUMN]
+
+    # Check for remaining non-numeric columns
+    non_numeric = X_train.select_dtypes(
+        exclude=["number", "bool"]
+    ).columns.tolist()
+
+    if non_numeric:
+        raise ValueError(
+            f"Remaining non-numeric columns: {non_numeric}"
+        )
+
+    # Ensure consistent feature columns
+    assert X_train.columns.equals(X_validation.columns)
+    assert X_train.columns.equals(X_test.columns)
+
+    print("Number of features:", X_train.shape[1])
 
     return (
         X_train,

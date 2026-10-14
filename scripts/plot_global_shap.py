@@ -16,14 +16,14 @@ RESULT_PATH = os.path.join(
     PROJECT_ROOT,
     "outputs",
     "results",
-    "shap_global_importance.csv"
+    "shap_global_importance_v3.csv"
 )
 
 FIGURE_PATH = os.path.join(
     PROJECT_ROOT,
     "outputs",
     "figures",
-    "shap_global_importance.png"
+    "shap_global_importance_v3.png"
 )
 
 

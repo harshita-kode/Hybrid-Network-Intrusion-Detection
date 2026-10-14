@@ -3,7 +3,7 @@ GC2 - IMPROVED CIC-IDS2017
 COMPLETE DATA PREPROCESSING AND DATASET DOCUMENTATION
 ================================================================================
 
-Generated: 2026-10-11 14:45:24
+Generated: 2026-10-14 01:15:38
 
 DATASET VERSION:
 Data_V3_SSH_Unknown_final
@@ -12,10 +12,10 @@ SOURCE DATASET:
 Improved CIC-IDS2017
 
 SOURCE DIRECTORY:
-C:\Users\saaral\Desktop\gc\pattern recog\project\]code\Hybrid-Network-Intrusion-Detection\data\raw\improved_CIC-IDS2017
+C:\Users\harsh\Downloads\Projects\Hybrid-Network-Intrusion-Detection\data\raw\improved_CIC-IDS2017
 
 OUTPUT DIRECTORY:
-C:\Users\saaral\Desktop\gc\pattern recog\project\]code\Hybrid-Network-Intrusion-Detection\data\processed\Data_V3_SSH_Unknown_final
+C:\Users\harsh\Downloads\Projects\Hybrid-Network-Intrusion-Detection\data\processed\Data_V3_SSH_Unknown_final
 
 ================================================================================
 1. ORIGINAL SOURCE FILES
