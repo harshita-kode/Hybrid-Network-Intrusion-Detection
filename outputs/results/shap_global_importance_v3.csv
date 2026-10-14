@@ -1,0 +1,16 @@
+feature,mean_abs_shap
+Bwd Packet Length Std,0.28349996
+Total Length of Fwd Packet,0.19989675
+id,0.18749048
+Bwd Init Win Bytes,0.1836176
+Bwd Packet Length Mean,0.18340544
+Src Port,0.17724176
+Bwd Packet Length Max,0.16382651
+Fwd RST Flags,0.14943616
+Dst Port,0.1426772
+Fwd Packet Length Std,0.10186879
+Fwd Packet Length Max,0.09661825
+Flow Duration,0.09618317
+Packet Length Mean,0.085563526
+Flow IAT Min,0.076459005
+Bwd IAT Std,0.07199202
