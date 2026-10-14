@@ -243,11 +243,53 @@ def generate_alert(
     return alert
 
 
+
 def alert_to_dict(alert: SecurityAlert) -> Dict[str, Any]:
-    """Convert a security alert to a JSON-compatible dictionary."""
+    """
+    Convert a security alert into a clean JSON-compatible
+    dictionary without repeating explanation features.
+    """
+
     if not isinstance(alert, SecurityAlert):
         raise TypeError("Expected SecurityAlert")
-    return _json_safe(alert)
+
+    # Convert the existing alert to a dictionary.
+    result = _json_safe(alert)
+
+    cleaned_explanations = []
+
+    for explanation in result["explanations"]:
+
+        method = explanation["method"]
+
+        cleaned = {
+            "method": method
+        }
+
+        if method == "shap":
+
+            # SHAP contributions already contain the
+            # feature names, feature values and SHAP values.
+            cleaned["contributions"] = explanation[
+                "contributions"
+            ]
+
+        else:
+
+            # KNN and Autoencoder use feature_details.
+            cleaned["feature_details"] = explanation[
+                "feature_details"
+            ]
+
+        # Preserve model-specific supporting information.
+        if explanation.get("details"):
+            cleaned["details"] = explanation["details"]
+
+        cleaned_explanations.append(cleaned)
+
+    result["explanations"] = cleaned_explanations
+
+    return result
 
 
 def alert_to_json(alert: SecurityAlert) -> str:
@@ -299,9 +341,6 @@ def format_alert(alert: SecurityAlert) -> str:
             lines.append(
                 f"\nMethod: {explanation.method}"
             )
-
-            for feature in explanation.top_features:
-                lines.append(f"  - {feature}")
 
             if explanation.contributions:
                 lines.append("SHAP contributions:")

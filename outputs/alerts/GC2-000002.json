@@ -1,0 +1,97 @@
+{
+  "alert_id": "GC2-000002",
+  "timestamp": "2026-10-14T13:08:19.834328+00:00",
+  "detection_status": "UNCERTAIN",
+  "predicted_class": "DoS GoldenEye",
+  "detection_confidence": 0.36001113057136536,
+  "evidence": {
+    "classifier": "XGBoost",
+    "confidence_threshold": 0.95,
+    "confidence_route": "LOW_CONFIDENCE",
+    "further_analysis_required": true,
+    "integration_stage": 2,
+    "kb_called": true,
+    "kb_matched": false,
+    "nearest_pattern_id": "KB_0003279",
+    "nearest_distance": 9.347165805173104,
+    "kb_cutoff": 0.9453825241925351,
+    "ae_called": false,
+    "kb_updated": false,
+    "kb_route": "AUTOENCODER",
+    "review_reason": "KB miss; chronological context unavailable"
+  },
+  "explanations": [
+    {
+      "method": "shap",
+      "contributions": [
+        {
+          "feature": "Fwd Seg Size Min",
+          "feature_value": 32.0,
+          "shap_value": 1.26320481300354
+        },
+        {
+          "feature": "Bwd IAT Std",
+          "feature_value": 31017180.26688507,
+          "shap_value": 1.09792959690094
+        },
+        {
+          "feature": "Bwd Packet Length Mean",
+          "feature_value": 0.0,
+          "shap_value": -0.9646210074424744
+        },
+        {
+          "feature": "Bwd Packet Length Std",
+          "feature_value": 0.0,
+          "shap_value": -0.9356955885887146
+        },
+        {
+          "feature": "Idle Std",
+          "feature_value": 20697634.55239781,
+          "shap_value": 0.825659453868866
+        }
+      ],
+      "details": {
+        "description": "Feature contributions to the XGBoost predicted-class output"
+      }
+    },
+    {
+      "method": "knn_feature_distance",
+      "feature_details": [
+        {
+          "feature": "Active Min",
+          "squared_difference": 82.10641660384864,
+          "distance_share": 0.9397605403701746
+        },
+        {
+          "feature": "Active Std",
+          "squared_difference": 1.1831456849490671,
+          "distance_share": 0.013541860358965634
+        },
+        {
+          "feature": "Down/Up Ratio",
+          "squared_difference": 0.8099493152865914,
+          "distance_share": 0.009270388816000303
+        },
+        {
+          "feature": "Flow IAT Min",
+          "squared_difference": 0.530443613439895,
+          "distance_share": 0.006071266990098038
+        },
+        {
+          "feature": "SYN Flag Count",
+          "squared_difference": 0.4804530139182012,
+          "distance_share": 0.00549909255156903
+        }
+      ],
+      "details": {
+        "kb_matched": false,
+        "route": "AUTOENCODER",
+        "nearest_pattern_id": "KB_0003279",
+        "nearest_distance": 9.347165805173104,
+        "match_cutoff": 0.9453825241925351
+      }
+    }
+  ],
+  "risk": null,
+  "message": "Traffic requires further investigation."
+}

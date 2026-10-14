@@ -1,0 +1,97 @@
+{
+  "alert_id": "GC2-000005",
+  "timestamp": "2026-10-14T13:08:20.119276+00:00",
+  "detection_status": "UNCERTAIN",
+  "predicted_class": "Portscan",
+  "detection_confidence": 0.5050626397132874,
+  "evidence": {
+    "classifier": "XGBoost",
+    "confidence_threshold": 0.95,
+    "confidence_route": "LOW_CONFIDENCE",
+    "further_analysis_required": true,
+    "integration_stage": 2,
+    "kb_called": true,
+    "kb_matched": false,
+    "nearest_pattern_id": "KB_0001725",
+    "nearest_distance": 29.340054665525685,
+    "kb_cutoff": 0.9453825241925351,
+    "ae_called": false,
+    "kb_updated": false,
+    "kb_route": "AUTOENCODER",
+    "review_reason": "KB miss; chronological context unavailable"
+  },
+  "explanations": [
+    {
+      "method": "shap",
+      "contributions": [
+        {
+          "feature": "Flow Duration",
+          "feature_value": 19.0,
+          "shap_value": 1.8604263067245483
+        },
+        {
+          "feature": "Total Length of Fwd Packet",
+          "feature_value": 0.0,
+          "shap_value": 0.8106780648231506
+        },
+        {
+          "feature": "Dst Port",
+          "feature_value": 1098.0,
+          "shap_value": 0.6814561486244202
+        },
+        {
+          "feature": "Flow IAT Max",
+          "feature_value": 19.0,
+          "shap_value": 0.5136277079582214
+        },
+        {
+          "feature": "Flow IAT Min",
+          "feature_value": 19.0,
+          "shap_value": -0.3847580850124359
+        }
+      ],
+      "details": {
+        "description": "Feature contributions to the XGBoost predicted-class output"
+      }
+    },
+    {
+      "method": "knn_feature_distance",
+      "feature_details": [
+        {
+          "feature": "Total TCP Flow Time",
+          "squared_difference": 700.5321478240669,
+          "distance_share": 0.8137785396012526
+        },
+        {
+          "feature": "Flow Bytes/s",
+          "squared_difference": 42.514746592217854,
+          "distance_share": 0.04938758128487957
+        },
+        {
+          "feature": "Fwd Packet Length Min",
+          "squared_difference": 34.38217056344592,
+          "distance_share": 0.03994031199902766
+        },
+        {
+          "feature": "Flow IAT Min",
+          "squared_difference": 22.76641175503243,
+          "distance_share": 0.026446776736110535
+        },
+        {
+          "feature": "Fwd Segment Size Avg",
+          "squared_difference": 8.140730576829542,
+          "distance_share": 0.009456742079113492
+        }
+      ],
+      "details": {
+        "kb_matched": false,
+        "route": "AUTOENCODER",
+        "nearest_pattern_id": "KB_0001725",
+        "nearest_distance": 29.340054665525685,
+        "match_cutoff": 0.9453825241925351
+      }
+    }
+  ],
+  "risk": null,
+  "message": "Traffic requires further investigation."
+}
