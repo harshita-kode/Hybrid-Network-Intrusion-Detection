@@ -1,0 +1,7 @@
+{
+  "test_rows": 1200,
+  "benign_excluded": true,
+  "accuracy": 0.9808333333333333,
+  "balanced_accuracy": 0.89919102529722,
+  "macro_f1": 0.8960165548401409
+}
