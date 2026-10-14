@@ -1,0 +1,2 @@
+alert_id,shadow_status,decision_changed,requires_review,detection_status,predicted_class,confidence,kb_matched,ae_anomalous,risk_score,risk_decision,nearest_historical_attack,historical_distance,kb_candidate_id,kb_candidate_status,shadow_kb_matched,shadow_kb_pattern_id,shadow_kb_distance
+GC2-000001,BENIGN,False,False,BENIGN,BENIGN,0.9999994039535522,,,,NOT_AVAILABLE,Infiltration,12068.344367971487,,,,,

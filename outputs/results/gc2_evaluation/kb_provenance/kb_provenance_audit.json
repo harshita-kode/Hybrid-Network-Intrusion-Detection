@@ -1,0 +1,42 @@
+{
+  "kb_records": 5203,
+  "kb_features": 73,
+  "kb_cutoff": 0.9453825241925351,
+  "reference_labels": {
+    "FTP-Patator": 2383,
+    "SSH-Patator": 1776,
+    "DoS Slowhttptest": 1044
+  },
+  "identity_overlap": {
+    "known_test": {
+      "records": 272989,
+      "exact_identity_overlap": 0
+    },
+    "unknown_test": {
+      "records": 8673,
+      "exact_identity_overlap": 5203
+    }
+  },
+  "vector_overlap": {
+    "known_test": {
+      "sample_size": 500,
+      "exact_vector_matches": 0,
+      "near_zero_vector_matches": 0,
+      "kb_similarity_matches": 0,
+      "median_nearest_distance": 30.94989051916211
+    },
+    "unknown_test": {
+      "sample_size": 500,
+      "exact_vector_matches": 311,
+      "near_zero_vector_matches": 311,
+      "kb_similarity_matches": 489,
+      "median_nearest_distance": 5.960464477539063e-08
+    }
+  },
+  "limitations": [
+    "Exact identity overlap requires full reference metadata.",
+    "Vector-overlap results use 500 sampled flows per split.",
+    "Feature-vector equality does not necessarily mean identical original records.",
+    "KB construction provenance must be confirmed from the original build script."
+  ]
+}

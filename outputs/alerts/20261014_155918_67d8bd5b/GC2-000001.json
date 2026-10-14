@@ -1,0 +1,155 @@
+{
+  "alert_id": "GC2-000001",
+  "timestamp": "2026-10-14T15:59:18.179380+00:00",
+  "detection_status": "BENIGN",
+  "predicted_class": "BENIGN",
+  "detection_confidence": 0.9999994039535522,
+  "evidence": {
+    "classifier": "XGBoost",
+    "confidence_threshold": 0.95,
+    "confidence_route": "HIGH_CONFIDENCE",
+    "further_analysis_required": false,
+    "integration_stage": 2,
+    "kb_called": false,
+    "ae_called": false,
+    "risk_config_illustrative": true,
+    "risk_calculated": false,
+    "risk_note": "No accepted known attack or no matching asset/threat rating configuration",
+    "historical_comparison": {
+      "nearest_historical_attack": "Infiltration",
+      "distance": 12068.344367971487,
+      "method": "robust_scaled_euclidean",
+      "reference_count": 801,
+      "interpretation": "Nearest labelled historical attack profile. Distance is not a calibrated probability or confirmation of attack identity."
+    },
+    "historical_comparison_role": "SUPPORTING_EVIDENCE_ONLY"
+  },
+  "explanations": [
+    {
+      "method": "shap",
+      "contributions": [
+        {
+          "feature": "Active Min",
+          "feature_value": 38773.0,
+          "shap_value": 0.8229652047157288
+        },
+        {
+          "feature": "Bwd Init Win Bytes",
+          "feature_value": 939.0,
+          "shap_value": 0.5986585021018982
+        },
+        {
+          "feature": "Bwd Packet Length Mean",
+          "feature_value": 126.71428571428574,
+          "shap_value": 0.28249335289001465
+        },
+        {
+          "feature": "Src Port",
+          "feature_value": 51714.0,
+          "shap_value": 0.21960553526878357
+        },
+        {
+          "feature": "Down/Up Ratio",
+          "feature_value": 1.0,
+          "shap_value": 0.18829740583896637
+        }
+      ],
+      "details": {
+        "description": "Feature contributions to the XGBoost predicted-class output"
+      }
+    }
+  ],
+  "risk": null,
+  "message": "Traffic classified as benign.",
+  "hybrid_shadow_decision": {
+    "original_status": "BENIGN",
+    "shadow_status": "BENIGN",
+    "decision_changed": false,
+    "requires_review": false,
+    "reason": "KB miss; Autoencoder did not detect anomaly",
+    "kb_matched": false,
+    "ae_anomalous": false,
+    "ae_mse": 0.011549921057002564,
+    "ae_threshold": 0.046787647058566334
+  },
+  "hybrid_diagnostics": {
+    "frozen_kb_independent_lookup": {
+      "method": "knn_feature_distance",
+      "kb_matched": false,
+      "route": "AUTOENCODER",
+      "nearest_pattern_id": "KB_0005202",
+      "nearest_distance": 20.953774878285564,
+      "match_cutoff": 0.9453825241925351,
+      "top_feature_differences": [
+        {
+          "feature": "Active Std",
+          "squared_difference": 90.38432385801042,
+          "distance_share": 0.20585838731532588
+        },
+        {
+          "feature": "Fwd IAT Max",
+          "squared_difference": 51.53018753837213,
+          "distance_share": 0.1173646142595495
+        },
+        {
+          "feature": "Flow IAT Max",
+          "squared_difference": 48.66580471624009,
+          "distance_share": 0.11084072600936853
+        },
+        {
+          "feature": "Bwd IAT Max",
+          "squared_difference": 48.502984615186485,
+          "distance_share": 0.11046988865622234
+        },
+        {
+          "feature": "Bwd IAT Std",
+          "squared_difference": 32.40508651862344,
+          "distance_share": 0.07380548492033906
+        }
+      ]
+    },
+    "ae_independent": {
+      "method": "autoencoder_reconstruction",
+      "anomaly_mse": 0.011549921057002564,
+      "original_mse": 0.01154992108543714,
+      "threshold": 0.046787647058566334,
+      "anomalous": false,
+      "feature_count": 93,
+      "ensemble_size": 3,
+      "top_features": [
+        {
+          "feature": "dst_connections_60s",
+          "transformed_value": -0.6280691623687744,
+          "squared_error": 0.1947821883114642,
+          "error_share": 0.18133735477884583
+        },
+        {
+          "feature": "Fwd Act Data Pkts",
+          "transformed_value": 0.0,
+          "squared_error": 0.13632753792883356,
+          "error_share": 0.12691753453348198
+        },
+        {
+          "feature": "src_dst_connections_60s",
+          "transformed_value": -0.7253816723823547,
+          "squared_error": 0.07574124900977353,
+          "error_share": 0.07051321202488939
+        },
+        {
+          "feature": "src_dst_port_connections_60s",
+          "transformed_value": -0.6957263350486755,
+          "squared_error": 0.06411661929728633,
+          "error_share": 0.05969097195961574
+        },
+        {
+          "feature": "Bwd Packet Length Max",
+          "transformed_value": 1.0671011209487915,
+          "squared_error": 0.06124487810833301,
+          "error_share": 0.057017452602796795
+        }
+      ],
+      "mse_consistency": true
+    },
+    "historical_flow_count": 38765
+  }
+}

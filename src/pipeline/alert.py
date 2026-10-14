@@ -141,12 +141,22 @@ def validate_detection_consistency(status, evidence):
                 "and positive anomaly evidence"
             )
 
+    
     if status == "UNCERTAIN":
-        if kb_matched is True or ae_anomalous is True:
+
+        # A KB match may still require investigation
+        # when the stored pattern has no verified label.
+        #
+        # However, a confirmed Autoencoder anomaly
+        # after a KB miss should use
+        # POTENTIAL_NEW_UNKNOWN instead.
+
+        if ae_anomalous is True:
             raise ValueError(
                 "Uncertain status conflicts with "
-                "positive KB or AE evidence"
+                "a positive Autoencoder anomaly"
             )
+
 
 
 def generate_alert(
@@ -327,8 +337,17 @@ def format_alert(alert: SecurityAlert) -> str:
     lines.append("\n--- DETECTION EVIDENCE ---")
 
     if alert.evidence:
+            
         for key, value in alert.evidence.items():
+
+            if key in (
+                "historical_comparison",
+                "historical_comparison_role",
+            ):
+                continue
+
             lines.append(f"{key}: {value}")
+
     else:
         lines.append("No additional evidence provided.")
 
@@ -368,6 +387,57 @@ def format_alert(alert: SecurityAlert) -> str:
 
                 for key, value in explanation.details.items():
                     lines.append(f"  {key}: {value}")
+
+    
+    # ==================================================
+    # HISTORICAL ATTACK COMPARISON
+    # ==================================================
+
+    historical = alert.evidence.get(
+        "historical_comparison"
+    )
+
+    lines.append(
+        "\n--- HISTORICAL ATTACK COMPARISON ---"
+    )
+
+    if historical is None:
+
+        lines.append(
+            "Historical comparison unavailable."
+        )
+
+    else:
+
+        lines.append(
+            "Nearest historical attack: "
+            f"{historical['nearest_historical_attack']}"
+        )
+
+        lines.append(
+            "Distance: "
+            f"{historical['distance']:.6f}"
+        )
+
+        lines.append(
+            "Method: "
+            f"{historical['method']}"
+        )
+
+        lines.append(
+            "Reference records: "
+            f"{historical['reference_count']}"
+        )
+
+        lines.append(
+            "Interpretation: "
+            f"{historical['interpretation']}"
+        )
+
+        lines.append(
+            "Role: SUPPORTING_EVIDENCE_ONLY"
+        )
+
 
     lines.append("\n--- ASSET-BASED RISK ---")
 

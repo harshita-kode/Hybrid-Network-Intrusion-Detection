@@ -1,0 +1,22 @@
+{
+  "samples": 180,
+  "unknown_samples": 90,
+  "benign_samples": 90,
+  "unknown_suspicious_count": 3,
+  "unknown_suspicious_rate": 0.03333333333333333,
+  "benign_false_positive_count": 2,
+  "benign_false_positive_rate": 0.022222222222222223,
+  "kb_match_count": 86,
+  "ae_call_count": 94,
+  "context_preparation_seconds": 11.93662779999977,
+  "total_evaluation_seconds": 74.53592670000035,
+  "evaluation_type": "Selected high-confidence benign unknown attacks versus sampled benign controls",
+  "limitations": [
+    "Not representative of all unknown-test traffic.",
+    "KB matches are not automatically counted malicious.",
+    "Uses master chronology, not live arrival order.",
+    "Master history may differ from AE calibration context.",
+    "Unknown-test independence from AE and KB training must be verified.",
+    "XGBoost leakage audit remains unresolved."
+  ]
+}

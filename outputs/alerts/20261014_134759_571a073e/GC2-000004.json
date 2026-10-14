@@ -1,0 +1,56 @@
+{
+  "alert_id": "GC2-000004",
+  "timestamp": "2026-10-14T13:47:59.514789+00:00",
+  "detection_status": "BENIGN",
+  "predicted_class": "BENIGN",
+  "detection_confidence": 0.9999935626983643,
+  "evidence": {
+    "classifier": "XGBoost",
+    "confidence_threshold": 0.95,
+    "confidence_route": "HIGH_CONFIDENCE",
+    "further_analysis_required": false,
+    "integration_stage": 2,
+    "kb_called": false,
+    "ae_called": false,
+    "risk_config_illustrative": true,
+    "risk_calculated": false,
+    "risk_note": "No accepted known attack or no matching asset/threat rating configuration"
+  },
+  "explanations": [
+    {
+      "method": "shap",
+      "contributions": [
+        {
+          "feature": "Dst Port",
+          "feature_value": 443.0,
+          "shap_value": 0.8096083402633667
+        },
+        {
+          "feature": "Active Min",
+          "feature_value": 128872.0,
+          "shap_value": 0.7140348553657532
+        },
+        {
+          "feature": "Fwd PSH Flags",
+          "feature_value": 43.0,
+          "shap_value": -0.4037252366542816
+        },
+        {
+          "feature": "Down/Up Ratio",
+          "feature_value": 1.616161616161616,
+          "shap_value": 0.2659417986869812
+        },
+        {
+          "feature": "Bwd Init Win Bytes",
+          "feature_value": 666.0,
+          "shap_value": 0.2432185709476471
+        }
+      ],
+      "details": {
+        "description": "Feature contributions to the XGBoost predicted-class output"
+      }
+    }
+  ],
+  "risk": null,
+  "message": "Traffic classified as benign."
+}

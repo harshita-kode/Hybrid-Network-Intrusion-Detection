@@ -1,0 +1,147 @@
+{
+  "alert_id": "GC2-000003",
+  "timestamp": "2026-10-14T14:11:26.206357+00:00",
+  "detection_status": "POTENTIAL_NEW_UNKNOWN",
+  "predicted_class": "DoS GoldenEye",
+  "detection_confidence": 0.45543375611305237,
+  "evidence": {
+    "classifier": "XGBoost",
+    "confidence_threshold": 0.95,
+    "confidence_route": "LOW_CONFIDENCE",
+    "further_analysis_required": true,
+    "integration_stage": 3,
+    "kb_called": true,
+    "kb_matched": false,
+    "nearest_pattern_id": "KB_0002741",
+    "nearest_distance": 1.031884488750663,
+    "kb_cutoff": 0.9453825241925351,
+    "ae_called": true,
+    "kb_updated": false,
+    "kb_route": "AUTOENCODER",
+    "ae_anomalous": true,
+    "ae_mse": 0.3343086674587666,
+    "ae_threshold": 0.046787647058566334,
+    "historical_flow_count": 127051,
+    "review_reason": "KB miss followed by Autoencoder anomaly",
+    "risk_config_illustrative": true,
+    "risk_calculated": false,
+    "risk_note": "No accepted known attack or no matching asset/threat rating configuration"
+  },
+  "explanations": [
+    {
+      "method": "shap",
+      "contributions": [
+        {
+          "feature": "Fwd Seg Size Min",
+          "feature_value": 32.0,
+          "shap_value": 1.2356103658676147
+        },
+        {
+          "feature": "Bwd IAT Std",
+          "feature_value": 28160876.16439738,
+          "shap_value": 1.1286308765411377
+        },
+        {
+          "feature": "Bwd Packet Length Std",
+          "feature_value": 0.0,
+          "shap_value": -0.9892167448997498
+        },
+        {
+          "feature": "Bwd Packet Length Mean",
+          "feature_value": 0.0,
+          "shap_value": -0.8814458250999451
+        },
+        {
+          "feature": "Idle Std",
+          "feature_value": 18825302.49502618,
+          "shap_value": 0.7178393006324768
+        }
+      ],
+      "details": {
+        "description": "Feature contributions to the XGBoost predicted-class output"
+      }
+    },
+    {
+      "method": "knn_feature_distance",
+      "feature_details": [
+        {
+          "feature": "Src Port",
+          "squared_difference": 0.714593651907583,
+          "distance_share": 0.6711150612544418
+        },
+        {
+          "feature": "Active Min",
+          "squared_difference": 0.22868634361701776,
+          "distance_share": 0.21477219829044578
+        },
+        {
+          "feature": "Fwd Bulk Rate Avg",
+          "squared_difference": 0.016130382466397527,
+          "distance_share": 0.015148948760034565
+        },
+        {
+          "feature": "Fwd IAT Min",
+          "squared_difference": 0.015602266550815768,
+          "distance_share": 0.014652965421687003
+        },
+        {
+          "feature": "Fwd Bytes/Bulk Avg",
+          "squared_difference": 0.011542169224060076,
+          "distance_share": 0.010839899829974983
+        }
+      ],
+      "details": {
+        "kb_matched": false,
+        "route": "AUTOENCODER",
+        "nearest_pattern_id": "KB_0002741",
+        "nearest_distance": 1.031884488750663,
+        "match_cutoff": 0.9453825241925351
+      }
+    },
+    {
+      "method": "autoencoder_reconstruction",
+      "feature_details": [
+        {
+          "feature": "Fwd Bytes/Bulk Avg",
+          "transformed_value": 7.971085548400879,
+          "squared_error": 2.7816617735459204,
+          "error_share": 0.08946923775082956
+        },
+        {
+          "feature": "SYN Flag Count",
+          "transformed_value": 1.630929708480835,
+          "squared_error": 2.348399138090612,
+          "error_share": 0.0755337988312775
+        },
+        {
+          "feature": "Fwd Bulk Rate Avg",
+          "transformed_value": 7.50163459777832,
+          "squared_error": 2.190088506966049,
+          "error_share": 0.07044190317765463
+        },
+        {
+          "feature": "Fwd Act Data Pkts",
+          "transformed_value": 2.5849626064300537,
+          "squared_error": 1.7044680149599383,
+          "error_share": 0.05482242863579322
+        },
+        {
+          "feature": "Fwd PSH Flags",
+          "transformed_value": 1.7924813032150269,
+          "squared_error": 1.6718488203257398,
+          "error_share": 0.05377326640200825
+        }
+      ],
+      "details": {
+        "anomaly_mse": 0.3343086674587666,
+        "threshold": 0.046787647058566334,
+        "anomalous": true,
+        "feature_count": 93,
+        "ensemble_size": 3,
+        "mse_consistency": true
+      }
+    }
+  ],
+  "risk": null,
+  "message": "Anomalous traffic without a sufficient KB match."
+}

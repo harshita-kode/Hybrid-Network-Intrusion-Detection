@@ -1,0 +1,56 @@
+{
+  "alert_id": "GC2-000002",
+  "timestamp": "2026-10-14T13:47:59.394016+00:00",
+  "detection_status": "BENIGN",
+  "predicted_class": "BENIGN",
+  "detection_confidence": 0.9999991655349731,
+  "evidence": {
+    "classifier": "XGBoost",
+    "confidence_threshold": 0.95,
+    "confidence_route": "HIGH_CONFIDENCE",
+    "further_analysis_required": false,
+    "integration_stage": 2,
+    "kb_called": false,
+    "ae_called": false,
+    "risk_config_illustrative": true,
+    "risk_calculated": false,
+    "risk_note": "No accepted known attack or no matching asset/threat rating configuration"
+  },
+  "explanations": [
+    {
+      "method": "shap",
+      "contributions": [
+        {
+          "feature": "Fwd IAT Min",
+          "feature_value": 23002.0,
+          "shap_value": 0.8438583016395569
+        },
+        {
+          "feature": "Bwd Init Win Bytes",
+          "feature_value": 673.0,
+          "shap_value": 0.6196648478507996
+        },
+        {
+          "feature": "Active Min",
+          "feature_value": 23960.0,
+          "shap_value": 0.5339637994766235
+        },
+        {
+          "feature": "id",
+          "feature_value": 475008.0,
+          "shap_value": 0.24704083800315857
+        },
+        {
+          "feature": "Fwd Seg Size Min",
+          "feature_value": 20.0,
+          "shap_value": 0.24338789284229279
+        }
+      ],
+      "details": {
+        "description": "Feature contributions to the XGBoost predicted-class output"
+      }
+    }
+  ],
+  "risk": null,
+  "message": "Traffic classified as benign."
+}

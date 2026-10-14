@@ -1,0 +1,155 @@
+{
+  "alert_id": "GC2-000004",
+  "timestamp": "2026-10-14T16:00:14.947947+00:00",
+  "detection_status": "BENIGN",
+  "predicted_class": "BENIGN",
+  "detection_confidence": 0.9999935626983643,
+  "evidence": {
+    "classifier": "XGBoost",
+    "confidence_threshold": 0.95,
+    "confidence_route": "HIGH_CONFIDENCE",
+    "further_analysis_required": false,
+    "integration_stage": 2,
+    "kb_called": false,
+    "ae_called": false,
+    "risk_config_illustrative": true,
+    "risk_calculated": false,
+    "risk_note": "No accepted known attack or no matching asset/threat rating configuration",
+    "historical_comparison": {
+      "nearest_historical_attack": "DoS GoldenEye",
+      "distance": 2144700.007530424,
+      "method": "robust_scaled_euclidean",
+      "reference_count": 801,
+      "interpretation": "Nearest labelled historical attack profile. Distance is not a calibrated probability or confirmation of attack identity."
+    },
+    "historical_comparison_role": "SUPPORTING_EVIDENCE_ONLY"
+  },
+  "explanations": [
+    {
+      "method": "shap",
+      "contributions": [
+        {
+          "feature": "Dst Port",
+          "feature_value": 443.0,
+          "shap_value": 0.8096083402633667
+        },
+        {
+          "feature": "Active Min",
+          "feature_value": 128872.0,
+          "shap_value": 0.7140348553657532
+        },
+        {
+          "feature": "Fwd PSH Flags",
+          "feature_value": 43.0,
+          "shap_value": -0.4037252366542816
+        },
+        {
+          "feature": "Down/Up Ratio",
+          "feature_value": 1.616161616161616,
+          "shap_value": 0.2659417986869812
+        },
+        {
+          "feature": "Bwd Init Win Bytes",
+          "feature_value": 666.0,
+          "shap_value": 0.2432185709476471
+        }
+      ],
+      "details": {
+        "description": "Feature contributions to the XGBoost predicted-class output"
+      }
+    }
+  ],
+  "risk": null,
+  "message": "Traffic classified as benign.",
+  "hybrid_shadow_decision": {
+    "original_status": "BENIGN",
+    "shadow_status": "BENIGN",
+    "decision_changed": false,
+    "requires_review": false,
+    "reason": "KB miss; Autoencoder did not detect anomaly",
+    "kb_matched": false,
+    "ae_anomalous": false,
+    "ae_mse": 0.02172225328727332,
+    "ae_threshold": 0.046787647058566334
+  },
+  "hybrid_diagnostics": {
+    "frozen_kb_independent_lookup": {
+      "method": "knn_feature_distance",
+      "kb_matched": false,
+      "route": "AUTOENCODER",
+      "nearest_pattern_id": "KB_0001907",
+      "nearest_distance": 29.551370258306715,
+      "match_cutoff": 0.9453825241925351,
+      "top_feature_differences": [
+        {
+          "feature": "Bwd IAT Min",
+          "squared_difference": 236.82560969329154,
+          "distance_share": 0.27118984155019976
+        },
+        {
+          "feature": "Bwd Bulk Rate Avg",
+          "squared_difference": 163.68312036166373,
+          "distance_share": 0.18743411885568242
+        },
+        {
+          "feature": "Down/Up Ratio",
+          "squared_difference": 141.5394172496565,
+          "distance_share": 0.16207728626457432
+        },
+        {
+          "feature": "Bwd Bytes/Bulk Avg",
+          "squared_difference": 100.78023313516137,
+          "distance_share": 0.11540380067304346
+        },
+        {
+          "feature": "Active Min",
+          "squared_difference": 26.136942366866933,
+          "distance_share": 0.0299295049562291
+        }
+      ]
+    },
+    "ae_independent": {
+      "method": "autoencoder_reconstruction",
+      "anomaly_mse": 0.02172225328727332,
+      "original_mse": 0.021722253722449143,
+      "threshold": 0.046787647058566334,
+      "anomalous": false,
+      "feature_count": 93,
+      "ensemble_size": 3,
+      "top_features": [
+        {
+          "feature": "Fwd Bytes/Bulk Avg",
+          "transformed_value": 8.086410522460938,
+          "squared_error": 0.42022834846147816,
+          "error_share": 0.2080163752950189
+        },
+        {
+          "feature": "Bwd PSH Flags",
+          "transformed_value": 3.892789363861084,
+          "squared_error": 0.15169143833835128,
+          "error_share": 0.07508846864319589
+        },
+        {
+          "feature": "Fwd Bulk Rate Avg",
+          "transformed_value": 11.821784019470215,
+          "squared_error": 0.15060190868977466,
+          "error_share": 0.0745491428002271
+        },
+        {
+          "feature": "Fwd Seg Size Min",
+          "transformed_value": 1.5334429740905762,
+          "squared_error": 0.13124536011083401,
+          "error_share": 0.0649674972773709
+        },
+        {
+          "feature": "Fwd Act Data Pkts",
+          "transformed_value": 4.4594316482543945,
+          "squared_error": 0.09763677767235397,
+          "error_share": 0.04833098162284143
+        }
+      ],
+      "mse_consistency": true
+    },
+    "historical_flow_count": 1132225
+  }
+}

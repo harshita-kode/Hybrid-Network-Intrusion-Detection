@@ -1,0 +1,32 @@
+{
+  "unknown": {
+    "samples": 1301,
+    "high_confidence_benign": 1068,
+    "kb_matches": 1243,
+    "ae_anomalies_among_kb_misses": 55,
+    "kb_or_ae_signals": 1298,
+    "original_review_flags_approx": 75,
+    "shadow_review_flags_approx": 1140,
+    "new_review_flags_approx": 1065
+  },
+  "benign": {
+    "samples": 1301,
+    "high_confidence_benign": 1301,
+    "kb_matches": 0,
+    "ae_anomalies_among_kb_misses": 33,
+    "kb_or_ae_signals": 33,
+    "original_review_flags_approx": 0,
+    "shadow_review_flags_approx": 33,
+    "new_review_flags_approx": 33
+  },
+  "threshold": 0.95,
+  "elapsed_seconds": 2.758753100000831,
+  "warnings": [
+    "Offline approximation: not exact GC2Pipeline.predict_one decisions.",
+    "KB matches are retrieval signals, not confirmed malicious detections.",
+    "Known-class XGBoost numeric mapping inferred from sorted training labels; verify training encoder.",
+    "XGBoost includes potential leakage features id, Attempted Category, is_attempted.",
+    "Random split may share capture-session patterns; AE training/calibration independence unverified.",
+    "This is not a production throughput benchmark."
+  ]
+}

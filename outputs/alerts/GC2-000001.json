@@ -1,6 +1,6 @@
 {
   "alert_id": "GC2-000001",
-  "timestamp": "2026-10-14T13:10:13.787222+00:00",
+  "timestamp": "2026-10-14T13:31:20.869363+00:00",
   "detection_status": "POTENTIAL_NEW_UNKNOWN",
   "predicted_class": "BENIGN",
   "detection_confidence": 0.34774988889694214,
@@ -22,7 +22,10 @@
     "ae_mse": 0.16033035637187698,
     "ae_threshold": 0.046787647058566334,
     "historical_flow_count": 127049,
-    "review_reason": "KB miss followed by Autoencoder anomaly"
+    "review_reason": "KB miss followed by Autoencoder anomaly",
+    "risk_config_illustrative": true,
+    "risk_calculated": false,
+    "risk_note": "No accepted known attack or no matching asset/threat rating configuration"
   },
   "explanations": [
     {

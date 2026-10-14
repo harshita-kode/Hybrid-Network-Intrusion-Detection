@@ -1,0 +1,158 @@
+{
+  "source_demo_file": "data\\processed\\knn_kb\\demo_similarity_audit\\autoencoder_demo_unmatched.parquet",
+  "source_demo_row": 0,
+  "production_routing_alert": {
+    "alert_id": "GC2-DEMO-001",
+    "timestamp": "2026-10-14T15:48:36.850215+00:00",
+    "detection_status": "BENIGN",
+    "predicted_class": "BENIGN",
+    "detection_confidence": 0.9999910593032837,
+    "evidence": {
+      "classifier": "XGBoost",
+      "confidence_threshold": 0.95,
+      "confidence_route": "HIGH_CONFIDENCE",
+      "further_analysis_required": false,
+      "integration_stage": 2,
+      "kb_called": false,
+      "ae_called": false,
+      "risk_config_illustrative": true,
+      "risk_calculated": false,
+      "risk_note": "No accepted known attack or no matching asset/threat rating configuration",
+      "historical_comparison": {
+        "nearest_historical_attack": "Infiltration - Portscan",
+        "distance": 40.426457852240766,
+        "method": "robust_scaled_euclidean",
+        "reference_count": 801,
+        "interpretation": "Nearest labelled historical attack profile. Distance is not a calibrated probability or confirmation of attack identity."
+      },
+      "historical_comparison_role": "SUPPORTING_EVIDENCE_ONLY"
+    },
+    "explanations": [
+      {
+        "method": "shap",
+        "contributions": [
+          {
+            "feature": "Down/Up Ratio",
+            "feature_value": 1.4,
+            "shap_value": 0.4258105754852295
+          },
+          {
+            "feature": "Dst Port",
+            "feature_value": 22.0,
+            "shap_value": -0.36689743399620056
+          },
+          {
+            "feature": "Bwd Packet Length Mean",
+            "feature_value": 80.71428571428574,
+            "shap_value": 0.29724207520484924
+          },
+          {
+            "feature": "Fwd Packet Length Std",
+            "feature_value": 131.75492400665715,
+            "shap_value": -0.2263576239347458
+          },
+          {
+            "feature": "Fwd Act Data Pkts",
+            "feature_value": 17.0,
+            "shap_value": 0.2257959097623825
+          }
+        ],
+        "details": {
+          "description": "Feature contributions to the XGBoost predicted-class output"
+        }
+      }
+    ],
+    "risk": null,
+    "message": "Traffic classified as benign."
+  },
+  "independent_diagnostics": {
+    "frozen_kb_independent_lookup": {
+      "method": "knn_feature_distance",
+      "kb_matched": false,
+      "route": "AUTOENCODER",
+      "nearest_pattern_id": "KB_0000601",
+      "nearest_distance": 1.1375812215121017,
+      "match_cutoff": 0.9453825241925351,
+      "top_feature_differences": [
+        {
+          "feature": "Bwd IAT Min",
+          "squared_difference": 1.0,
+          "distance_share": 0.7727431629916692
+        },
+        {
+          "feature": "Fwd IAT Max",
+          "squared_difference": 0.0661246222582584,
+          "distance_share": 0.051097349755475925
+        },
+        {
+          "feature": "Down/Up Ratio",
+          "squared_difference": 0.05549108562160373,
+          "distance_share": 0.042880357021079604
+        },
+        {
+          "feature": "Bwd Packets/s",
+          "squared_difference": 0.025294135563542083,
+          "distance_share": 0.019545870320511576
+        },
+        {
+          "feature": "Bwd IAT Mean",
+          "squared_difference": 0.019661166675915262,
+          "distance_share": 0.015193032125253162
+        }
+      ]
+    },
+    "ae_independent": {
+      "method": "autoencoder_reconstruction",
+      "anomaly_mse": 0.5282932537115237,
+      "original_mse": 0.5282932768265406,
+      "threshold": 0.046787647058566334,
+      "anomalous": true,
+      "feature_count": 93,
+      "ensemble_size": 3,
+      "top_features": [
+        {
+          "feature": "Fwd Bytes/Bulk Avg",
+          "transformed_value": 0.0,
+          "squared_error": 11.887668087349752,
+          "error_share": 0.24195725979460977
+        },
+        {
+          "feature": "Fwd Bulk Rate Avg",
+          "transformed_value": 0.0,
+          "squared_error": 4.7242620896155785,
+          "error_share": 0.09615590722719947
+        },
+        {
+          "feature": "Bwd Bulk Rate Avg",
+          "transformed_value": 0.0,
+          "squared_error": 3.117066693145643,
+          "error_share": 0.06344363840988657
+        },
+        {
+          "feature": "src_ssh_connections_60s",
+          "transformed_value": 4.9628448486328125,
+          "squared_error": 3.1058012030222053,
+          "error_share": 0.06321434473340759
+        },
+        {
+          "feature": "src_dst_ssh_connections_60s",
+          "transformed_value": 4.9628448486328125,
+          "squared_error": 3.018495897576448,
+          "error_share": 0.061437364394120855
+        }
+      ],
+      "mse_consistency": true
+    },
+    "known_attack_knn_comparison": {
+      "predicted_known_class": "Web Attack - Brute Force",
+      "knn_confidence": 0.3363027119249272,
+      "interpretation": "Known-class prediction (not proof of membership)"
+    }
+  },
+  "notes": [
+    "Independent diagnostics never override the production alert.",
+    "Frozen KB matches are retrieval evidence, not attack proof.",
+    "Known-class KNN vote share is not a calibrated probability.",
+    "No KB updates or candidate promotion were performed."
+  ]
+}

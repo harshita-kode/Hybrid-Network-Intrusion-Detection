@@ -23,6 +23,9 @@ from pathlib import Path
 import joblib
 import numpy as np
 import pandas as pd
+from src.analysis.risk_lookup import RiskLookup
+
+from src.analysis.historical_similarity import HistoricalSimilarity
 
 from src.pipeline.ae_integration import AutoencoderIntegration
 
@@ -69,7 +72,7 @@ class GC2Pipeline:
 
     def __init__(self, confidence_threshold=None):
 
-        print("Initializing GC2 Stage 2 pipeline...")
+        print("Initializing detection pipeline...")
 
         (
             self.model,
@@ -80,6 +83,11 @@ class GC2Pipeline:
         ) = load_shap_inputs()
 
         self.ae_integration = None
+        self.risk_lookup = RiskLookup()
+
+        print("Loading historical attack-profile comparator...")
+
+        self.historical_comparator = HistoricalSimilarity()
 
         self.confidence_threshold = (
             DEFAULT_CONFIDENCE_THRESHOLD
@@ -163,14 +171,16 @@ class GC2Pipeline:
         print("KB features:", len(kb_features))
         print("KB cutoff:", self.kb_artifact["cutoff"])
 
-        print("GC2 Stage 2 initialized.")
+        print("Detection pipeline initialized.")
 
     def predict_one(
         self,
         flow,
         alert_id="GC2-001",
         prepared_ae_flow=None,
-        historical_flow_count=None
+        historical_flow_count=None,
+        asset_id=None,
+        acceptable_risk=None,
     ):
 
         # --------------------------------------------------
@@ -429,6 +439,73 @@ class GC2Pipeline:
         # SECURITY ALERT
         # --------------------------------------------------
 
+        
+        # --------------------------------------------------
+        # ASSET-BASED RISK ASSESSMENT
+        # --------------------------------------------------
+
+        destination_ip = None
+        destination_port = None
+
+        if "Dst IP" in frame.columns:
+            value = frame.iloc[0]["Dst IP"]
+
+            if pd.notna(value):
+                destination_ip = str(value)
+
+        if "Dst Port" in frame.columns:
+            value = frame.iloc[0]["Dst Port"]
+
+            if pd.notna(value):
+                destination_port = int(value)
+
+        risk_result = self.risk_lookup.assess(
+            detection_status=status,
+            predicted_class=predicted_class,
+            detection_confidence=confidence,
+            asset_id=asset_id,
+            destination_ip=destination_ip,
+            destination_port=destination_port,
+            acceptable_risk=acceptable_risk,
+        )
+
+        evidence["risk_config_illustrative"] = (
+            self.risk_lookup.illustrative
+        )
+
+        evidence["risk_calculated"] = (
+            risk_result is not None
+        )
+
+        if risk_result is None:
+            evidence["risk_note"] = (
+                "No accepted known attack or no matching "
+                "asset/threat rating configuration"
+            )
+        else:
+            evidence["risk_note"] = (
+                "Illustrative risk assessment for testing"
+                if self.risk_lookup.illustrative
+                else "Configured asset-based risk assessment"
+            )
+
+        
+        # ==================================================
+        # HISTORICAL ATTACK-PROFILE COMPARISON
+        # ==================================================
+
+        historical_result = self.historical_comparator.compare(
+            frame
+        )
+
+        evidence["historical_comparison"] = historical_result
+
+        evidence["historical_comparison_role"] = (
+            "SUPPORTING_EVIDENCE_ONLY"
+        )
+
+
+
         return generate_alert(
             alert_id=alert_id,
             detection_status=status,
@@ -436,5 +513,5 @@ class GC2Pipeline:
             detection_confidence=confidence,
             evidence=evidence,
             explanations=explanations,
-            risk=None
+            risk=risk_result
         )

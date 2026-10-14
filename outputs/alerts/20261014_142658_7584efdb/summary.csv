@@ -1,0 +1,2 @@
+alert_id,detection_status,predicted_class,confidence,kb_matched,ae_anomalous,risk_score,risk_decision,nearest_historical_attack,historical_distance
+GC2-000001,KNOWN_ATTACK,DDoS,0.9999960660934448,,,132.0,REQUIRES_TREATMENT,DoS Hulk,56.67230364119673

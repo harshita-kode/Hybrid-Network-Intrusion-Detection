@@ -1,0 +1,41 @@
+{
+  "result": "PASSED",
+  "rows": 2602,
+  "checks": {
+    "original_route": true,
+    "shadow_route": true,
+    "original_review": true,
+    "shadow_review": true,
+    "changed": true,
+    "known_attack_preserved": true,
+    "unscreened_unchanged": true,
+    "screened_kb_matches_reviewed": true,
+    "screened_ae_anomalies_reviewed": true
+  },
+  "groups": {
+    "UNKNOWN": {
+      "samples": 1301,
+      "high_confidence_benign_screened": 1068,
+      "original_review_flags": 75,
+      "shadow_review_flags": 1140,
+      "new_review_flags": 1065,
+      "screened_kb_matches": 1030,
+      "screened_ae_anomalies_after_kb_miss": 35
+    },
+    "BENIGN": {
+      "samples": 1301,
+      "high_confidence_benign_screened": 1301,
+      "original_review_flags": 0,
+      "shadow_review_flags": 33,
+      "new_review_flags": 33,
+      "screened_kb_matches": 0,
+      "screened_ae_anomalies_after_kb_miss": 33
+    }
+  },
+  "scope": "Saved offline routing algebra only; not runtime predict_one equivalence.",
+  "limitations": [
+    "Unverified KB pattern provenance is treated as review evidence, not confirmed malicious detection.",
+    "XGBoost class mapping and label/identifier leakage remain unresolved.",
+    "AE training/calibration independence and same-session correlation remain unverified."
+  ]
+}

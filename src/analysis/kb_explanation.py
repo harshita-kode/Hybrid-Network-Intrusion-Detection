@@ -73,16 +73,22 @@ def explain_kb_match(flow, artifact, reference, top_n=5):
         np.sqrt(squared_differences.sum())
     )
 
+   
+    # Allow small floating-point differences between
+    # sklearn's optimized distance calculation and
+    # direct Euclidean reconstruction.
+
     if not np.isclose(
         reproduced_distance,
         nearest_distance,
         rtol=1e-5,
-        atol=1e-7
+        atol=1e-6
     ):
         raise ValueError(
             "Feature differences do not reproduce "
             "the KNN distance. Verify its metric."
         )
+
 
     total_squared = float(squared_differences.sum())
 

@@ -1,0 +1,155 @@
+{
+  "alert_id": "GC2-000002",
+  "timestamp": "2026-10-14T15:59:56.118908+00:00",
+  "detection_status": "BENIGN",
+  "predicted_class": "BENIGN",
+  "detection_confidence": 0.9999991655349731,
+  "evidence": {
+    "classifier": "XGBoost",
+    "confidence_threshold": 0.95,
+    "confidence_route": "HIGH_CONFIDENCE",
+    "further_analysis_required": false,
+    "integration_stage": 2,
+    "kb_called": false,
+    "ae_called": false,
+    "risk_config_illustrative": true,
+    "risk_calculated": false,
+    "risk_note": "No accepted known attack or no matching asset/threat rating configuration",
+    "historical_comparison": {
+      "nearest_historical_attack": "DoS Slowloris",
+      "distance": 158.50007188103066,
+      "method": "robust_scaled_euclidean",
+      "reference_count": 801,
+      "interpretation": "Nearest labelled historical attack profile. Distance is not a calibrated probability or confirmation of attack identity."
+    },
+    "historical_comparison_role": "SUPPORTING_EVIDENCE_ONLY"
+  },
+  "explanations": [
+    {
+      "method": "shap",
+      "contributions": [
+        {
+          "feature": "Fwd IAT Min",
+          "feature_value": 23002.0,
+          "shap_value": 0.8438583016395569
+        },
+        {
+          "feature": "Bwd Init Win Bytes",
+          "feature_value": 673.0,
+          "shap_value": 0.6196648478507996
+        },
+        {
+          "feature": "Active Min",
+          "feature_value": 23960.0,
+          "shap_value": 0.5339637994766235
+        },
+        {
+          "feature": "id",
+          "feature_value": 475008.0,
+          "shap_value": 0.24704083800315857
+        },
+        {
+          "feature": "Fwd Seg Size Min",
+          "feature_value": 20.0,
+          "shap_value": 0.24338789284229279
+        }
+      ],
+      "details": {
+        "description": "Feature contributions to the XGBoost predicted-class output"
+      }
+    }
+  ],
+  "risk": null,
+  "message": "Traffic classified as benign.",
+  "hybrid_shadow_decision": {
+    "original_status": "BENIGN",
+    "shadow_status": "BENIGN",
+    "decision_changed": false,
+    "requires_review": false,
+    "reason": "KB miss; Autoencoder did not detect anomaly",
+    "kb_matched": false,
+    "ae_anomalous": false,
+    "ae_mse": 0.010895921133259165,
+    "ae_threshold": 0.046787647058566334
+  },
+  "hybrid_diagnostics": {
+    "frozen_kb_independent_lookup": {
+      "method": "knn_feature_distance",
+      "kb_matched": false,
+      "route": "AUTOENCODER",
+      "nearest_pattern_id": "KB_0000268",
+      "nearest_distance": 22.538452247272527,
+      "match_cutoff": 0.9453825241925351,
+      "top_feature_differences": [
+        {
+          "feature": "Total TCP Flow Time",
+          "squared_difference": 100.5107740925445,
+          "distance_share": 0.1978629317339796
+        },
+        {
+          "feature": "Active Max",
+          "squared_difference": 30.12981193129721,
+          "distance_share": 0.05931277492531131
+        },
+        {
+          "feature": "Active Mean",
+          "squared_difference": 30.12981193129721,
+          "distance_share": 0.05931277492531131
+        },
+        {
+          "feature": "Active Min",
+          "squared_difference": 30.12981193129721,
+          "distance_share": 0.05931277492531131
+        },
+        {
+          "feature": "Fwd IAT Max",
+          "squared_difference": 18.768772818184882,
+          "distance_share": 0.036947724742780096
+        }
+      ]
+    },
+    "ae_independent": {
+      "method": "autoencoder_reconstruction",
+      "anomaly_mse": 0.010895921133259165,
+      "original_mse": 0.010895920917391777,
+      "threshold": 0.046787647058566334,
+      "anomalous": false,
+      "feature_count": 93,
+      "ensemble_size": 3,
+      "top_features": [
+        {
+          "feature": "SYN Flag Count",
+          "transformed_value": 1.0,
+          "squared_error": 0.22126898504173434,
+          "error_share": 0.21836028080597408
+        },
+        {
+          "feature": "Bwd IAT Std",
+          "transformed_value": 1.0760654211044312,
+          "squared_error": 0.12893487838058348,
+          "error_share": 0.1272399574823288
+        },
+        {
+          "feature": "Subflow Fwd Bytes",
+          "transformed_value": -6.138091087341309,
+          "squared_error": 0.09024123600662885,
+          "error_share": 0.08905496462131376
+        },
+        {
+          "feature": "Dst Port",
+          "transformed_value": 0.19245173037052155,
+          "squared_error": 0.07669016500406205,
+          "error_share": 0.07568203000608031
+        },
+        {
+          "feature": "Bwd IAT Mean",
+          "transformed_value": 0.8720462918281555,
+          "squared_error": 0.03738545441151805,
+          "error_share": 0.036894001759072904
+        }
+      ],
+      "mse_consistency": true
+    },
+    "historical_flow_count": 1000308
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "known_train": {
+    "split": "known_train",
+    "rows": 1273944,
+    "columns": 94,
+    "class_distribution": {
+      "BENIGN": 1001663,
+      "DoS Hulk": 110927,
+      "DDoS": 66601,
+      "Portscan": 60371,
+      "Infiltration - Portscan": 25768,
+      "DoS GoldenEye": 5297,
+      "DoS Slowloris": 2701,
+      "Botnet": 515,
+      "Web Attack - Brute Force": 51,
+      "Infiltration": 22,
+      "Web Attack - XSS": 13,
+      "Web Attack - SQL Injection": 9,
+      "Heartbleed": 6
+    },
+    "missing_xgb_features": [],
+    "missing_kb_features": [],
+    "valid_timestamps": 1273944,
+    "invalid_timestamps": 0,
+    "nonfinite_xgb_cells": 0,
+    "rows_with_nonfinite_xgb": 0,
+    "rows_with_nonfinite_kb": 0,
+    "suspicious_model_features": [
+      "id",
+      "Attempted Category",
+      "is_attempted"
+    ]
+  },
+  "known_validation": {
+    "split": "known_validation",
+    "rows": 272988,
+    "columns": 94,
+    "class_distribution": {
+      "BENIGN": 214642,
+      "DoS Hulk": 23770,
+      "DDoS": 14271,
+      "Portscan": 12937,
+      "Infiltration - Portscan": 5521,
+      "DoS GoldenEye": 1135,
+      "DoS Slowloris": 579,
+      "Botnet": 111,
+      "Web Attack - Brute Force": 11,
+      "Infiltration": 5,
+      "Web Attack - XSS": 3,
+      "Web Attack - SQL Injection": 2,
+      "Heartbleed": 1
+    },
+    "missing_xgb_features": [],
+    "missing_kb_features": [],
+    "valid_timestamps": 272988,
+    "invalid_timestamps": 0,
+    "nonfinite_xgb_cells": 0,
+    "rows_with_nonfinite_xgb": 0,
+    "rows_with_nonfinite_kb": 0,
+    "suspicious_model_features": [
+      "id",
+      "Attempted Category",
+      "is_attempted"
+    ]
+  },
+  "known_test": {
+    "split": "known_test",
+    "rows": 272989,
+    "columns": 94,
+    "class_distribution": {
+      "BENIGN": 214643,
+      "DoS Hulk": 23771,
+      "DDoS": 14272,
+      "Portscan": 12937,
+      "Infiltration - Portscan": 5522,
+      "DoS GoldenEye": 1135,
+      "DoS Slowloris": 579,
+      "Botnet": 110,
+      "Web Attack - Brute Force": 11,
+      "Infiltration": 4,
+      "Web Attack - SQL Injection": 2,
+      "Web Attack - XSS": 2,
+      "Heartbleed": 1
+    },
+    "missing_xgb_features": [],
+    "missing_kb_features": [],
+    "valid_timestamps": 272989,
+    "invalid_timestamps": 0,
+    "nonfinite_xgb_cells": 0,
+    "rows_with_nonfinite_xgb": 0,
+    "rows_with_nonfinite_kb": 0,
+    "suspicious_model_features": [
+      "id",
+      "Attempted Category",
+      "is_attempted"
+    ]
+  },
+  "unknown_test": {
+    "split": "unknown_test",
+    "rows": 8673,
+    "columns": 94,
+    "class_distribution": {
+      "FTP-Patator": 3972,
+      "SSH-Patator": 2961,
+      "DoS Slowhttptest": 1740
+    },
+    "missing_xgb_features": [],
+    "missing_kb_features": [],
+    "valid_timestamps": 8673,
+    "invalid_timestamps": 0,
+    "nonfinite_xgb_cells": 0,
+    "rows_with_nonfinite_xgb": 0,
+    "rows_with_nonfinite_kb": 0,
+    "suspicious_model_features": [
+      "id",
+      "Attempted Category",
+      "is_attempted"
+    ]
+  },
+  "overlap_train_known_validation": 0,
+  "overlap_train_known_test": 0
+}

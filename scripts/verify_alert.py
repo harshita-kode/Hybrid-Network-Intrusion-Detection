@@ -52,6 +52,14 @@ def main():
             "ae_anomalous": False
         }
     )
+    should_accept(
+        "UNCERTAIN",
+        {
+            "kb_matched": True,
+            "ae_called": False,
+            "kb_updated": False
+        }
+    )
 
     should_reject(
         "POTENTIAL_NEW_UNKNOWN",

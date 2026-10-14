@@ -1,0 +1,122 @@
+{
+  "source_demo_file": "data\\processed\\knn_kb\\demo_similarity_audit\\kb_demo_matched.parquet",
+  "source_demo_row": 0,
+  "production_routing_alert": {
+    "alert_id": "GC2-DEMO-001",
+    "timestamp": "2026-10-14T15:53:20.588820+00:00",
+    "detection_status": "KNOWN_ATTACK",
+    "predicted_class": "DoS Slowloris",
+    "detection_confidence": 0.9997088313102722,
+    "evidence": {
+      "classifier": "XGBoost",
+      "confidence_threshold": 0.95,
+      "confidence_route": "HIGH_CONFIDENCE",
+      "further_analysis_required": false,
+      "integration_stage": 2,
+      "kb_called": false,
+      "ae_called": false,
+      "risk_config_illustrative": true,
+      "risk_calculated": false,
+      "risk_note": "No accepted known attack or no matching asset/threat rating configuration",
+      "historical_comparison": {
+        "nearest_historical_attack": "DoS Slowloris",
+        "distance": 14.450108766061843,
+        "method": "robust_scaled_euclidean",
+        "reference_count": 801,
+        "interpretation": "Nearest labelled historical attack profile. Distance is not a calibrated probability or confirmation of attack identity."
+      },
+      "historical_comparison_role": "SUPPORTING_EVIDENCE_ONLY"
+    },
+    "explanations": [
+      {
+        "method": "shap",
+        "contributions": [
+          {
+            "feature": "id",
+            "feature_value": 22187.0,
+            "shap_value": 3.3967912197113037
+          },
+          {
+            "feature": "Bwd IAT Max",
+            "feature_value": 109681248.0,
+            "shap_value": 2.1078877449035645
+          },
+          {
+            "feature": "Bwd IAT Mean",
+            "feature_value": 54843354.5,
+            "shap_value": 1.8402409553527832
+          },
+          {
+            "feature": "Total Length of Bwd Packet",
+            "feature_value": 0.0,
+            "shap_value": 1.3051735162734985
+          },
+          {
+            "feature": "Fwd PSH Flags",
+            "feature_value": 2.0,
+            "shap_value": 0.8484591841697693
+          }
+        ],
+        "details": {
+          "description": "Feature contributions to the XGBoost predicted-class output"
+        }
+      }
+    ],
+    "risk": null,
+    "message": "Known attack classification reported."
+  },
+  "independent_diagnostics": {
+    "frozen_kb_independent_lookup": {
+      "method": "knn_feature_distance",
+      "kb_matched": true,
+      "route": "KB_MATCH",
+      "nearest_pattern_id": "KB_0000086",
+      "nearest_distance": 0.04722359294440991,
+      "match_cutoff": 0.9453825241925351,
+      "top_feature_differences": [
+        {
+          "feature": "Src Port",
+          "squared_difference": 0.0005715754758326798,
+          "distance_share": 0.2563040879208632
+        },
+        {
+          "feature": "Fwd IAT Max",
+          "squared_difference": 0.00010392263077612633,
+          "distance_share": 0.04660066119283416
+        },
+        {
+          "feature": "Flow IAT Max",
+          "squared_difference": 9.78522266524167e-05,
+          "distance_share": 0.04387858955396297
+        },
+        {
+          "feature": "Bwd IAT Max",
+          "squared_difference": 9.783873953935321e-05,
+          "distance_share": 0.04387254170488864
+        },
+        {
+          "feature": "Subflow Fwd Bytes",
+          "squared_difference": 9.057433327959238e-05,
+          "distance_share": 0.04061505936105265
+        }
+      ]
+    },
+    "ae_independent": null,
+    "known_attack_knn_comparison": null
+  },
+  "hybrid_shadow_decision": {
+    "original_status": "KNOWN_ATTACK",
+    "shadow_status": "KNOWN_ATTACK",
+    "decision_changed": false,
+    "requires_review": false,
+    "reason": "Accepted known attack classification",
+    "kb_matched": true,
+    "ae_anomalous": null
+  },
+  "notes": [
+    "Independent diagnostics never override the production alert.",
+    "Frozen KB matches are retrieval evidence, not attack proof.",
+    "Known-class KNN vote share is not a calibrated probability.",
+    "No KB updates or candidate promotion were performed."
+  ]
+}
