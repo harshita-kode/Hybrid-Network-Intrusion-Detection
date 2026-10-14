@@ -51,7 +51,7 @@ def main():
         reviewed = store.review(
             candidate_id=first["candidate_id"],
             decision="APPROVED",
-            analyst="GC2 Test Analyst",
+            analyst="Test Analyst",
             note="Controlled review test",
         )
 

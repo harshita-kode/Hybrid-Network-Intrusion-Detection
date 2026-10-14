@@ -1,5 +1,5 @@
 
-"""Prepare a reproducible GC2 unknown-detection evaluation sample."""
+"""Prepare a reproducible unknown-detection evaluation sample."""
 
 from pathlib import Path
 

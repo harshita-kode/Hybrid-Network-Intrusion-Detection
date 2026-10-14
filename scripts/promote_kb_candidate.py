@@ -1,5 +1,5 @@
 
-"""Explicit GC2 KB candidate promotion CLI."""
+"""Explicit KB candidate promotion CLI."""
 
 import argparse
 import json

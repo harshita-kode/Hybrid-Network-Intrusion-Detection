@@ -41,7 +41,7 @@ OUTPUT_PATH = (
 
 def main():
 
-    print("\n========== GC2 STAGE 3 TEST ==========")
+    print("\n========== STAGE 3 TEST ==========")
 
     # --------------------------------------------------
     # LOAD CHRONOLOGICAL CONTEXT

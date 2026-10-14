@@ -300,7 +300,7 @@ def main():
 
     print("\nAudit saved to:", output_path)
 
-    print("\nGC2 DATASET AUDIT COMPLETE")
+    print("\nDATASET AUDIT COMPLETE")
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-"""Read-only GC2 demo on existing KB demo Parquet files.
+"""Read-only demo on existing KB demo Parquet files.
 
 Production decision and independent diagnostic evidence are deliberately separate.
 Run from repository root: python -m scripts.run_gc2_demo --scenario matched --row 0

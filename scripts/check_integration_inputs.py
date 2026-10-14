@@ -26,7 +26,7 @@ REQUIRED_FILES = {
 }
 
 def main():
-    print("\n=== GC2 COMPONENT CHECK ===")
+    print("\n=== COMPONENT CHECK ===")
 
     for name, relative_path in REQUIRED_FILES.items():
         path = ROOT / relative_path

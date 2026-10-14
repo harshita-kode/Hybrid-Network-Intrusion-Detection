@@ -643,6 +643,11 @@ def main():
                 and hybrid_diagnostics["ae_independent"] is not None
                 else None
             ),
+            "risk_level": (
+                alert.risk.risk_level
+                if alert.risk is not None
+                else "NOT_ASSESSED"
+            ),
 
         })
 

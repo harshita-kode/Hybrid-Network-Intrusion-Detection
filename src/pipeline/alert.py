@@ -316,7 +316,7 @@ def format_alert(alert: SecurityAlert) -> str:
     """Create a readable analyst-facing alert."""
 
     lines = [
-        "========== GC2 SECURITY ALERT ==========",
+        "========== SECURITY ALERT ==========",
         f"Alert ID: {alert.alert_id}",
         f"Timestamp: {alert.timestamp}",
         f"Detection status: {alert.detection_status}",
@@ -442,9 +442,12 @@ def format_alert(alert: SecurityAlert) -> str:
     lines.append("\n--- ASSET-BASED RISK ---")
 
     if alert.risk is None:
-        lines.append(
-            "Risk not calculated: asset/threat ratings unavailable."
-        )
+        lines.extend([
+            "Risk score: NOT_AVAILABLE",
+            "Risk level: NOT_ASSESSED",
+            "Risk decision: NOT_AVAILABLE",
+            "Risk basis: Insufficient validated asset/threat ratings",
+        ])
     else:
         r = alert.risk
 
@@ -457,6 +460,7 @@ def format_alert(alert: SecurityAlert) -> str:
             f"Threat value: {r.threat_value}",
             f"Vulnerability rating: {r.vulnerability}",
             f"Inherent risk: {r.inherent_risk:.2f}",
+            f"Risk level: {r.risk_level}",
             f"Acceptable risk: {r.acceptable_risk}",
             f"Risk decision: {r.decision}",
         ])

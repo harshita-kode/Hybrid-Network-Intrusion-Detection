@@ -20,9 +20,25 @@ class AssetRiskResult:
     inherent_risk: float
     acceptable_risk: Optional[float]
     decision: str
+    risk_level: str = "NOT_ASSESSED"
     destination_port: Optional[int] = None
     service: Optional[str] = None
     detection_confidence: Optional[float] = None
+
+
+def classify_risk_level(score: float) -> str:
+    """Provisional risk severity bands."""
+
+    if not 1 <= score <= 192:
+        raise ValueError("Risk score must be between 1 and 192")
+
+    if score <= 48:
+        return "LOW"
+    if score <= 96:
+        return "MEDIUM"
+    if score <= 144:
+        return "HIGH"
+    return "CRITICAL"
 
 
 def calculate_asset_risk(
@@ -118,4 +134,5 @@ def calculate_asset_risk(
         destination_port=destination_port,
         service=service,
         detection_confidence=detection_confidence,
+        risk_level=classify_risk_level(inherent_risk),
     )

@@ -201,7 +201,7 @@ def main():
         print("Shadow distance:", shadow["nearest_distance"])
 
         # -------------------------------------------------
-        # 9. Run real GC2 detection again.
+        # 9. Run real detection again.
         # -------------------------------------------------
 
         print("Running detection with shadow evidence...")

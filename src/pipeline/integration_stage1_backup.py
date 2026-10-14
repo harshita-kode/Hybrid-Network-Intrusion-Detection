@@ -33,7 +33,7 @@ from src.pipeline.alert import generate_alert
 class GC2Pipeline:
 
     def __init__(self, confidence_threshold=None):
-        print("Initializing GC2 pipeline...")
+        print("Initializing pipeline...")
 
         # Load the verified trained classifier.
         (
@@ -73,7 +73,7 @@ class GC2Pipeline:
             top_n=5
         )
 
-        print("GC2 Stage 1 initialized.")
+        print("Stage 1 initialized.")
 
     def predict_one(self, flow, alert_id="GC2-001"):
         """Process one preprocessed network flow."""

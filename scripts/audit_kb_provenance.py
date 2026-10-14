@@ -293,7 +293,7 @@ def main():
         exist_ok=True
     )
 
-    print("Loading frozen GC2 Knowledge Base...")
+    print("Loading frozen Knowledge Base...")
 
     pipeline = GC2Pipeline()
 

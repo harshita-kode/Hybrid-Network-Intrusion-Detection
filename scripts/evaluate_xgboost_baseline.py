@@ -64,9 +64,16 @@ def load_classifier():
             model.get_booster().feature_names
         )
 
-    if len(features) != 87:
+    if len(features) != 84:
         raise ValueError(
-            f"Expected 87 features, got {len(features)}"
+            f"Expected 84 features, got {len(features)}"
+        )
+
+    excluded = {"id", "Attempted Category", "is_attempted"}
+
+    if excluded.intersection(features):
+        raise ValueError(
+            "Excluded metadata features found in XGBoost model"
         )
 
     if model.n_classes_ != 13:
@@ -389,7 +396,7 @@ def main():
         ) if elapsed > 0 else None,
         "routing": routing,
         "evaluation_limitations": [
-            "XGBoost-only evaluation, not full GC2 accuracy.",
+            "XGBoost-only evaluation, not full accuracy.",
             "Potential leakage features require review.",
             "Class mapping must match original training encoder.",
             "Batch prediction timing excludes model loading and SHAP.",

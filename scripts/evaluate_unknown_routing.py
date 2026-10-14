@@ -54,7 +54,7 @@ CONFIDENCE_THRESHOLD = 0.95
 BATCH_SIZE = 5000
 
 # Exploratory thresholds only.
-# These do not change the deployed GC2 threshold.
+# These do not change the deployed threshold.
 THRESHOLDS = [0.80, 0.90, 0.95, 0.99]
 
 
@@ -84,9 +84,16 @@ def load_classifier():
 
     features = list(features)
 
-    if len(features) != 87:
+    if len(features) != 84:
         raise ValueError(
-            f"Expected 87 features, got {len(features)}"
+            f"Expected 84 features, got {len(features)}"
+        )
+
+    excluded = {"id", "Attempted Category", "is_attempted"}
+
+    if excluded.intersection(features):
+        raise ValueError(
+            "Excluded metadata features found in XGBoost model"
         )
 
     if model.n_classes_ != 13:
