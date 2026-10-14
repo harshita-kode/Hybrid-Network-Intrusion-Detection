@@ -17,6 +17,7 @@ notebooks/exploration/*.parquet
 data/raw/*.csv
 data/raw/improved_CIC-IDS2017/*.csv
 outputs/alerts
+outputs/results
 
 *.sqlite3
 *.sqlite3-shm
