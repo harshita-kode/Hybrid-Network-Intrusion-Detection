@@ -69,19 +69,37 @@ class FeatureContribution:
     shap_value: float
 
 
+
 @dataclass
 class ExplanationResult:
     """
-    Explainability information for a prediction.
+    Common explanation output for XGBoost, KNN/KB
+    and Autoencoder detection components.
     """
 
+    # Explanation method
+    method: str = "shap"
+
+    # Common feature names
     top_features: List[str] = field(
         default_factory=list
     )
 
+    # Existing XGBoost SHAP contributions
     contributions: List[FeatureContribution] = field(
         default_factory=list
     )
+
+    # Method-specific feature evidence
+    feature_details: List[Dict] = field(
+        default_factory=list
+    )
+
+    # Method-specific supporting information
+    details: Dict = field(
+        default_factory=dict
+    )
+
 
 
 # ============================================================
