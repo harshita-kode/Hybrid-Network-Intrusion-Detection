@@ -6,8 +6,8 @@ Stage 1:
 XGBoost + SHAP + Security Alert + JSON
 
 Usage:
-    python run_gc2.py --input path/to/traffic.csv
-    python run_gc2.py --input path/to/traffic.parquet
+    python run_intrusion_detection.py --input path/to/traffic.csv
+    python run_intrusion_detection.py --input path/to/traffic.parquet
 """
 
 import argparse
@@ -127,7 +127,44 @@ def main():
         help="Screen high-confidence benign flows using frozen KB and AE in shadow mode",
     )
 
+    parser.add_argument(
+        "--demo",
+        choices=("known", "benign", "unknown", "kb-match", "kb-miss"),
+        help="Run a verified built-in demonstration scenario",
+    )
+
     args = parser.parse_args()
+
+    if args.demo is not None:
+        if args.input or args.known_test_row is not None:
+            parser.error("--demo cannot be combined with --input or --known-test-row")
+        if args.history:
+            parser.error("--demo cannot be combined with --history")
+        if args.limit != 1:
+            parser.error("--demo processes exactly one flow")
+
+        if args.asset_id is None:
+            args.asset_id = "A001"
+        if args.acceptable_risk is None:
+            args.acceptable_risk = 100.0
+
+        if args.demo == "known":
+            args.known_test_row = 4
+        elif args.demo == "benign":
+            args.known_test_row = 0
+        elif args.demo in ("unknown", "kb-miss"):
+            args.known_test_row = 235964
+        elif args.demo == "kb-match":
+            # Verified against real XGBoost + frozen KB: low-confidence
+            # DoS Slowhttptest flow, KB distance about 0.023755.
+            args.input = str(
+                ROOT / "data" / "processed"
+                / "Data_V3_SSH_Unknown_final" / "unknown_kb_splits"
+                / "unknown_final_test.parquet"
+            )
+
+        print(f"\nGC2 demo selected: {args.demo}")
+
     
     if args.known_test_row is None and not args.input:
         parser.error(
@@ -197,6 +234,25 @@ def main():
         )
 
 
+    if args.demo == "kb-match":
+        if len(data) <= 389:
+            raise ValueError("KB-match demo dataset must contain row 389")
+        data = data.iloc[[389]].copy()
+        record = data.iloc[0]
+        if not (
+            str(record.get("Label")) == "DoS Slowhttptest"
+            and str(record.get("source_file")) == "wednesday"
+            and int(record.get("id")) == 30028
+        ):
+            raise ValueError(
+                "KB-match demo record identity changed; refusing to use an unverified row"
+            )
+        data = data.drop(
+            columns=["Label", "Original_Label", "Attempted Category", "is_attempted"],
+            errors="ignore",
+        )
+        print("KB-match demo: final-test row 389, original ID 30028")
+
     if data.empty:
         raise ValueError("Input dataset is empty")
 
@@ -232,12 +288,6 @@ def main():
             f"Writable KB promoted patterns: {len(promoted)}"
         )
 
-
-    run_id = (
-        datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
-        + "_"
-        + uuid4().hex[:8]
-    )
 
     run_id = (
         datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")

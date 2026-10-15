@@ -1,0 +1,39 @@
+
+# ==========================================
+# Hybrid Network Intrusion Detection
+# Python Dependencies
+# ==========================================
+
+# Data Processing
+numpy
+pandas
+pyarrow
+
+# Machine Learning
+scikit-learn
+xgboost
+
+# Autoencoder / Deep Learning
+tensorflow
+keras
+
+# Model Saving and Loading
+joblib
+
+# Explainable AI
+shap
+
+# Scientific Computing
+scipy
+
+# Data Visualization
+matplotlib
+seaborn
+
+# Jupyter Notebooks
+jupyter
+ipykernel
+notebook
+
+# Progress Bars
+tqdm
