@@ -389,54 +389,55 @@ def format_alert(alert: SecurityAlert) -> str:
                     lines.append(f"  {key}: {value}")
 
     
-    # ==================================================
+        # ==================================================
     # HISTORICAL ATTACK COMPARISON
+    # Display only for unknown or uncertain detections.
     # ==================================================
 
-    historical = alert.evidence.get(
-        "historical_comparison"
-    )
+    if alert.detection_status in {
+        "POTENTIAL_NEW_UNKNOWN",
+        "PREVIOUSLY_LEARNED_UNKNOWN",
+        "UNCERTAIN",
+    }:
 
-    lines.append(
-        "\n--- HISTORICAL ATTACK COMPARISON ---"
-    )
-
-    if historical is None:
-
-        lines.append(
-            "Historical comparison unavailable."
+        historical = alert.evidence.get(
+            "historical_comparison"
         )
 
-    else:
+        if historical is not None:
 
-        lines.append(
-            "Nearest historical attack: "
-            f"{historical['nearest_historical_attack']}"
-        )
+            lines.append(
+                "\n--- HISTORICAL ATTACK COMPARISON ---"
+            )
 
-        lines.append(
-            "Distance: "
-            f"{historical['distance']:.6f}"
-        )
+            lines.append(
+                "Nearest historical attack: "
+                f"{historical['nearest_historical_attack']}"
+            )
 
-        lines.append(
-            "Method: "
-            f"{historical['method']}"
-        )
+            lines.append(
+                "Distance: "
+                f"{historical['distance']:.6f}"
+            )
 
-        lines.append(
-            "Reference records: "
-            f"{historical['reference_count']}"
-        )
+            lines.append(
+                "Method: "
+                f"{historical['method']}"
+            )
 
-        lines.append(
-            "Interpretation: "
-            f"{historical['interpretation']}"
-        )
+            lines.append(
+                "Reference records: "
+                f"{historical['reference_count']}"
+            )
 
-        lines.append(
-            "Role: SUPPORTING_EVIDENCE_ONLY"
-        )
+            lines.append(
+                "Interpretation: "
+                f"{historical['interpretation']}"
+            )
+
+            lines.append(
+                "Role: SUPPORTING_EVIDENCE_ONLY"
+            )
 
 
     lines.append("\n--- ASSET-BASED RISK ---")

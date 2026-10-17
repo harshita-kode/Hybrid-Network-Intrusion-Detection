@@ -494,16 +494,25 @@ class GC2Pipeline:
         # HISTORICAL ATTACK-PROFILE COMPARISON
         # ==================================================
 
-        historical_result = self.historical_comparator.compare(
-            frame
-        )
+        # ==================================================
+        # HISTORICAL ATTACK-PROFILE COMPARISON
+        # Only for unknown or uncertain traffic
+        # ==================================================
 
-        evidence["historical_comparison"] = historical_result
+        if status in {
+            "POTENTIAL_NEW_UNKNOWN",
+            "PREVIOUSLY_LEARNED_UNKNOWN",
+            "UNCERTAIN",
+        }:
+            historical_result = self.historical_comparator.compare(
+                frame
+            )
 
-        evidence["historical_comparison_role"] = (
-            "SUPPORTING_EVIDENCE_ONLY"
-        )
+            evidence["historical_comparison"] = historical_result
 
+            evidence["historical_comparison_role"] = (
+                "SUPPORTING_EVIDENCE_ONLY"
+            )
 
 
         return generate_alert(
