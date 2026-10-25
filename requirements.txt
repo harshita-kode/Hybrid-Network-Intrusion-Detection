@@ -1,39 +1,31 @@
 
-# ==========================================
-# Hybrid Network Intrusion Detection
-# Python Dependencies
-# ==========================================
+# GC2 - Hybrid Network Intrusion Detection System
 
 # Data Processing
-numpy
-pandas
+numpy==2.5.4
+pandas==3.1.0
 pyarrow
 
 # Machine Learning
-scikit-learn
+scikit-learn==1.9.1
 xgboost
 
-# Autoencoder / Deep Learning
-tensorflow
-keras
+# Autoencoder
+tensorflow==2.22.0rc0
 
-# Model Saving and Loading
-joblib
+# Model Storage
+joblib==1.6.0
 
-# Explainable AI
-shap
+# Explainability
+shap==0.54.1
 
 # Scientific Computing
 scipy
 
-# Data Visualization
-matplotlib
+# Visualization
+matplotlib==3.11.2
 seaborn
 
 # Jupyter Notebooks
 jupyter
 ipykernel
-notebook
-
-# Progress Bars
-tqdm
