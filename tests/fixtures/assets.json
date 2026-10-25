@@ -1,0 +1,90 @@
+
+{
+  "config_type": "illustrative_test_inventory",
+  "rating_scale": {
+    "minimum": 1,
+    "maximum": 4
+  },
+  "assets": [
+    {
+      "asset_id": "A001",
+      "asset_name": "Production Web Server",
+      "confidentiality": 3,
+      "integrity": 4,
+      "availability": 4,
+      "vulnerability": 3
+    },
+    {
+      "asset_id": "A002",
+      "asset_name": "Customer Database Server",
+      "confidentiality": 4,
+      "integrity": 4,
+      "availability": 4,
+      "vulnerability": 3
+    },
+    {
+      "asset_id": "A003",
+      "asset_name": "Internal File Server",
+      "confidentiality": 4,
+      "integrity": 3,
+      "availability": 3,
+      "vulnerability": 2
+    },
+    {
+      "asset_id": "A004",
+      "asset_name": "DNS Server",
+      "confidentiality": 2,
+      "integrity": 4,
+      "availability": 4,
+      "vulnerability": 3
+    },
+    {
+      "asset_id": "A005",
+      "asset_name": "Email Server",
+      "confidentiality": 4,
+      "integrity": 3,
+      "availability": 4,
+      "vulnerability": 3
+    },
+    {
+      "asset_id": "A006",
+      "asset_name": "Employee Workstation",
+      "confidentiality": 2,
+      "integrity": 2,
+      "availability": 2,
+      "vulnerability": 3
+    },
+    {
+      "asset_id": "A007",
+      "asset_name": "Authentication Server",
+      "confidentiality": 4,
+      "integrity": 4,
+      "availability": 4,
+      "vulnerability": 4
+    },
+    {
+      "asset_id": "A008",
+      "asset_name": "SSH Administration Server",
+      "confidentiality": 4,
+      "integrity": 4,
+      "availability": 3,
+      "vulnerability": 3
+    },
+    {
+      "asset_id": "A009",
+      "asset_name": "Backup Server",
+      "confidentiality": 4,
+      "integrity": 4,
+      "availability": 4,
+      "vulnerability": 2
+    },
+    {
+      "asset_id": "A010",
+      "asset_name": "Network Monitoring Server",
+      "confidentiality": 3,
+      "integrity": 4,
+      "availability": 3,
+      "vulnerability": 2
+    }
+  ]
+}

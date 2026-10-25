@@ -1,0 +1,31 @@
+
+# GC2 - Hybrid Network Intrusion Detection System
+
+# Data Processing
+numpy==2.5.4
+pandas==3.1.0
+pyarrow
+
+# Machine Learning
+scikit-learn==1.9.1
+xgboost
+
+# Autoencoder
+tensorflow==2.22.0rc0
+
+# Model Storage
+joblib==1.6.0
+
+# Explainability
+shap==0.54.1
+
+# Scientific Computing
+scipy
+
+# Visualization
+matplotlib==3.11.2
+seaborn
+
+# Jupyter Notebooks
+jupyter
+ipykernel

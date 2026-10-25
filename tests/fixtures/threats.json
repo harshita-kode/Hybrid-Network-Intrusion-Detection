@@ -1,0 +1,80 @@
+{
+  "config_type": "illustrative_test_threat_register",
+  "rating_scales": {
+    "probability": [
+      1,
+      3
+    ],
+    "impact": [
+      1,
+      4
+    ]
+  },
+  "threats": [
+    {
+      "name": "Botnet",
+      "probability": 2,
+      "impact": 3
+    },
+    {
+      "name": "DDoS",
+      "probability": 3,
+      "impact": 4
+    },
+    {
+      "name": "DoS GoldenEye",
+      "probability": 2,
+      "impact": 4
+    },
+    {
+      "name": "DoS Hulk",
+      "probability": 3,
+      "impact": 4
+    },
+    {
+      "name": "DoS Slowloris",
+      "probability": 2,
+      "impact": 3
+    },
+    {
+      "name": "Heartbleed",
+      "probability": 1,
+      "impact": 4
+    },
+    {
+      "name": "Infiltration",
+      "probability": 2,
+      "impact": 4
+    },
+    {
+      "name": "Infiltration - Portscan",
+      "probability": 2,
+      "impact": 3
+    },
+    {
+      "name": "Portscan",
+      "probability": 3,
+      "impact": 2
+    },
+    {
+      "name": "Web Attack - Brute Force",
+      "probability": 3,
+      "impact": 3
+    },
+    {
+      "name": "Web Attack - SQL Injection",
+      "probability": 2,
+      "impact": 4
+    },
+    {
+      "name": "Web Attack - XSS",
+      "probability": 2,
+      "impact": 3
+    },
+    {
+      "name": "UNKNOWN_ANOMALY",
+      "probability": 3,
+      "impact": 3
+    }
+  ]
+}

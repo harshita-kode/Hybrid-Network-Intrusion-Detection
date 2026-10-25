@@ -1,0 +1,1640 @@
+================================================================================
+GC2 - IMPROVED CIC-IDS2017
+COMPLETE DATA PREPROCESSING AND DATASET DOCUMENTATION
+================================================================================
+
+Generated: 2026-10-14 01:15:38
+
+DATASET VERSION:
+Data_V3_SSH_Unknown_final
+
+SOURCE DATASET:
+Improved CIC-IDS2017
+
+SOURCE DIRECTORY:
+C:\Users\harsh\Downloads\Projects\Hybrid-Network-Intrusion-Detection\data\raw\improved_CIC-IDS2017
+
+OUTPUT DIRECTORY:
+C:\Users\harsh\Downloads\Projects\Hybrid-Network-Intrusion-Detection\data\processed\Data_V3_SSH_Unknown_final
+
+================================================================================
+1. ORIGINAL SOURCE FILES
+================================================================================
+friday.csv
+monday.csv
+thursday.csv
+tuesday.csv
+wednesday.csv
+
+Original integrated records: 2099976
+Original columns: 92
+
+================================================================================
+2. PREPROCESSING SUMMARY
+================================================================================
+Original records: 2099976
+Removed NaN/Inf: 5
+Removed invalid negatives: 593
+Excluded attempted unknown-family: 3407
+Removed conflicting labels: 14140
+Removed duplicate feature vectors: 253237
+
+Final clean records: 1828594
+Final columns: 94
+Model features: 74
+
+Total removed: 271382
+Retention percentage: 87.0769 %
+
+================================================================================
+3. KNOWN AND UNKNOWN ATTACK CONFIGURATION
+================================================================================
+
+UNKNOWN ATTACK CLASSES:
+- SSH-Patator
+- FTP-Patator
+- DoS Slowhttptest
+
+KNOWN ATTACK CLASSES:
+- BENIGN
+- Botnet
+- DDoS
+- DoS GoldenEye
+- DoS Hulk
+- DoS Slowloris
+- Heartbleed
+- Infiltration
+- Infiltration - Portscan
+- Portscan
+- Web Attack - Brute Force
+- Web Attack - SQL Injection
+- Web Attack - XSS
+
+Unknown attack records: 8673
+Known records: 1819921
+
+================================================================================
+4. GENERATED DATASETS
+================================================================================
+
+----------------------------------------------------------------------
+FILE: clean_master.parquet
+----------------------------------------------------------------------
+Purpose:
+Complete cleaned Improved CICIDS2017 dataset.
+
+Rows: 1828594
+Columns: 94
+
+LABEL DISTRIBUTION:
+Label
+BENIGN                        1430948
+DoS Hulk                       158468
+DDoS                            95144
+Portscan                        86245
+Infiltration - Portscan         36811
+DoS GoldenEye                    7567
+FTP-Patator                      3972
+DoS Slowloris                    3859
+SSH-Patator                      2961
+DoS Slowhttptest                 1740
+Botnet                            736
+Web Attack - Brute Force           73
+Infiltration                       31
+Web Attack - XSS                   18
+Web Attack - SQL Injection         13
+Heartbleed                          8
+
+ALL COLUMNS:
+001. id [int64]
+002. Flow ID [str]
+003. Src IP [str]
+004. Src Port [int64]
+005. Dst IP [str]
+006. Dst Port [int64]
+007. Protocol [int64]
+008. Timestamp [str]
+009. Flow Duration [int64]
+010. Total Fwd Packet [int64]
+011. Total Bwd packets [int64]
+012. Total Length of Fwd Packet [int64]
+013. Total Length of Bwd Packet [int64]
+014. Fwd Packet Length Max [int64]
+015. Fwd Packet Length Min [int64]
+016. Fwd Packet Length Mean [float64]
+017. Fwd Packet Length Std [float64]
+018. Bwd Packet Length Max [int64]
+019. Bwd Packet Length Min [int64]
+020. Bwd Packet Length Mean [float64]
+021. Bwd Packet Length Std [float64]
+022. Flow Bytes/s [float64]
+023. Flow Packets/s [float64]
+024. Flow IAT Mean [float64]
+025. Flow IAT Std [float64]
+026. Flow IAT Max [int64]
+027. Flow IAT Min [int64]
+028. Fwd IAT Total [int64]
+029. Fwd IAT Mean [float64]
+030. Fwd IAT Std [float64]
+031. Fwd IAT Max [int64]
+032. Fwd IAT Min [int64]
+033. Bwd IAT Total [int64]
+034. Bwd IAT Mean [float64]
+035. Bwd IAT Std [float64]
+036. Bwd IAT Max [int64]
+037. Bwd IAT Min [int64]
+038. Fwd PSH Flags [int64]
+039. Bwd PSH Flags [int64]
+040. Fwd URG Flags [int64]
+041. Bwd URG Flags [int64]
+042. Fwd RST Flags [int64]
+043. Bwd RST Flags [int64]
+044. Fwd Header Length [int64]
+045. Bwd Header Length [int64]
+046. Fwd Packets/s [float64]
+047. Bwd Packets/s [float64]
+048. Packet Length Min [int64]
+049. Packet Length Max [int64]
+050. Packet Length Mean [float64]
+051. Packet Length Std [float64]
+052. Packet Length Variance [float64]
+053. FIN Flag Count [int64]
+054. SYN Flag Count [int64]
+055. RST Flag Count [int64]
+056. PSH Flag Count [int64]
+057. ACK Flag Count [int64]
+058. URG Flag Count [int64]
+059. CWR Flag Count [int64]
+060. ECE Flag Count [int64]
+061. Down/Up Ratio [float64]
+062. Average Packet Size [float64]
+063. Fwd Segment Size Avg [float64]
+064. Bwd Segment Size Avg [float64]
+065. Fwd Bytes/Bulk Avg [int64]
+066. Fwd Packet/Bulk Avg [int64]
+067. Fwd Bulk Rate Avg [int64]
+068. Bwd Bytes/Bulk Avg [int64]
+069. Bwd Packet/Bulk Avg [int64]
+070. Bwd Bulk Rate Avg [int64]
+071. Subflow Fwd Packets [int64]
+072. Subflow Fwd Bytes [int64]
+073. Subflow Bwd Packets [int64]
+074. Subflow Bwd Bytes [int64]
+075. FWD Init Win Bytes [int64]
+076. Bwd Init Win Bytes [int64]
+077. Fwd Act Data Pkts [int64]
+078. Fwd Seg Size Min [int64]
+079. Active Mean [float64]
+080. Active Std [float64]
+081. Active Max [int64]
+082. Active Min [int64]
+083. Idle Mean [float64]
+084. Idle Std [float64]
+085. Idle Max [int64]
+086. Idle Min [int64]
+087. ICMP Code [int64]
+088. ICMP Type [int64]
+089. Total TCP Flow Time [int64]
+090. Label [str]
+091. Attempted Category [int64]
+092. source_file [str]
+093. Original_Label [str]
+094. is_attempted [bool]
+
+MODEL FEATURES PRESENT:
+001. Protocol
+002. Flow Duration
+003. Total Fwd Packet
+004. Total Bwd packets
+005. Total Length of Fwd Packet
+006. Total Length of Bwd Packet
+007. Fwd Packet Length Max
+008. Fwd Packet Length Min
+009. Fwd Packet Length Mean
+010. Fwd Packet Length Std
+011. Bwd Packet Length Max
+012. Bwd Packet Length Min
+013. Bwd Packet Length Mean
+014. Bwd Packet Length Std
+015. Flow Bytes/s
+016. Flow Packets/s
+017. Flow IAT Mean
+018. Flow IAT Std
+019. Flow IAT Max
+020. Flow IAT Min
+021. Fwd IAT Total
+022. Fwd IAT Mean
+023. Fwd IAT Std
+024. Fwd IAT Max
+025. Fwd IAT Min
+026. Bwd IAT Total
+027. Bwd IAT Mean
+028. Bwd IAT Std
+029. Bwd IAT Max
+030. Bwd IAT Min
+031. Fwd PSH Flags
+032. Fwd URG Flags
+033. Fwd RST Flags
+034. Bwd RST Flags
+035. Fwd Header Length
+036. Bwd Header Length
+037. Fwd Packets/s
+038. Bwd Packets/s
+039. Packet Length Min
+040. Packet Length Max
+041. Packet Length Mean
+042. Packet Length Std
+043. Packet Length Variance
+044. FIN Flag Count
+045. SYN Flag Count
+046. RST Flag Count
+047. PSH Flag Count
+048. ACK Flag Count
+049. URG Flag Count
+050. CWR Flag Count
+051. ECE Flag Count
+052. Down/Up Ratio
+053. Average Packet Size
+054. Fwd Segment Size Avg
+055. Bwd Segment Size Avg
+056. Subflow Fwd Packets
+057. Subflow Fwd Bytes
+058. Subflow Bwd Packets
+059. Subflow Bwd Bytes
+060. FWD Init Win Bytes
+061. Bwd Init Win Bytes
+062. Fwd Act Data Pkts
+063. Fwd Seg Size Min
+064. Active Mean
+065. Active Std
+066. Active Max
+067. Active Min
+068. Idle Mean
+069. Idle Std
+070. Idle Max
+071. Idle Min
+072. ICMP Code
+073. ICMP Type
+074. Total TCP Flow Time
+
+Missing model features:
+None
+
+Attempted records:
+5699
+
+----------------------------------------------------------------------
+FILE: known_train.parquet
+----------------------------------------------------------------------
+Purpose:
+XGBoost supervised training dataset.
+
+Rows: 1273944
+Columns: 94
+
+LABEL DISTRIBUTION:
+Label
+BENIGN                        1001663
+DoS Hulk                       110927
+DDoS                            66601
+Portscan                        60371
+Infiltration - Portscan         25768
+DoS GoldenEye                    5297
+DoS Slowloris                    2701
+Botnet                            515
+Web Attack - Brute Force           51
+Infiltration                       22
+Web Attack - XSS                   13
+Web Attack - SQL Injection          9
+Heartbleed                          6
+
+ALL COLUMNS:
+001. id [int64]
+002. Flow ID [str]
+003. Src IP [str]
+004. Src Port [int64]
+005. Dst IP [str]
+006. Dst Port [int64]
+007. Protocol [int64]
+008. Timestamp [str]
+009. Flow Duration [int64]
+010. Total Fwd Packet [int64]
+011. Total Bwd packets [int64]
+012. Total Length of Fwd Packet [int64]
+013. Total Length of Bwd Packet [int64]
+014. Fwd Packet Length Max [int64]
+015. Fwd Packet Length Min [int64]
+016. Fwd Packet Length Mean [float64]
+017. Fwd Packet Length Std [float64]
+018. Bwd Packet Length Max [int64]
+019. Bwd Packet Length Min [int64]
+020. Bwd Packet Length Mean [float64]
+021. Bwd Packet Length Std [float64]
+022. Flow Bytes/s [float64]
+023. Flow Packets/s [float64]
+024. Flow IAT Mean [float64]
+025. Flow IAT Std [float64]
+026. Flow IAT Max [int64]
+027. Flow IAT Min [int64]
+028. Fwd IAT Total [int64]
+029. Fwd IAT Mean [float64]
+030. Fwd IAT Std [float64]
+031. Fwd IAT Max [int64]
+032. Fwd IAT Min [int64]
+033. Bwd IAT Total [int64]
+034. Bwd IAT Mean [float64]
+035. Bwd IAT Std [float64]
+036. Bwd IAT Max [int64]
+037. Bwd IAT Min [int64]
+038. Fwd PSH Flags [int64]
+039. Bwd PSH Flags [int64]
+040. Fwd URG Flags [int64]
+041. Bwd URG Flags [int64]
+042. Fwd RST Flags [int64]
+043. Bwd RST Flags [int64]
+044. Fwd Header Length [int64]
+045. Bwd Header Length [int64]
+046. Fwd Packets/s [float64]
+047. Bwd Packets/s [float64]
+048. Packet Length Min [int64]
+049. Packet Length Max [int64]
+050. Packet Length Mean [float64]
+051. Packet Length Std [float64]
+052. Packet Length Variance [float64]
+053. FIN Flag Count [int64]
+054. SYN Flag Count [int64]
+055. RST Flag Count [int64]
+056. PSH Flag Count [int64]
+057. ACK Flag Count [int64]
+058. URG Flag Count [int64]
+059. CWR Flag Count [int64]
+060. ECE Flag Count [int64]
+061. Down/Up Ratio [float64]
+062. Average Packet Size [float64]
+063. Fwd Segment Size Avg [float64]
+064. Bwd Segment Size Avg [float64]
+065. Fwd Bytes/Bulk Avg [int64]
+066. Fwd Packet/Bulk Avg [int64]
+067. Fwd Bulk Rate Avg [int64]
+068. Bwd Bytes/Bulk Avg [int64]
+069. Bwd Packet/Bulk Avg [int64]
+070. Bwd Bulk Rate Avg [int64]
+071. Subflow Fwd Packets [int64]
+072. Subflow Fwd Bytes [int64]
+073. Subflow Bwd Packets [int64]
+074. Subflow Bwd Bytes [int64]
+075. FWD Init Win Bytes [int64]
+076. Bwd Init Win Bytes [int64]
+077. Fwd Act Data Pkts [int64]
+078. Fwd Seg Size Min [int64]
+079. Active Mean [float64]
+080. Active Std [float64]
+081. Active Max [int64]
+082. Active Min [int64]
+083. Idle Mean [float64]
+084. Idle Std [float64]
+085. Idle Max [int64]
+086. Idle Min [int64]
+087. ICMP Code [int64]
+088. ICMP Type [int64]
+089. Total TCP Flow Time [int64]
+090. Label [str]
+091. Attempted Category [int64]
+092. source_file [str]
+093. Original_Label [str]
+094. is_attempted [bool]
+
+MODEL FEATURES PRESENT:
+001. Protocol
+002. Flow Duration
+003. Total Fwd Packet
+004. Total Bwd packets
+005. Total Length of Fwd Packet
+006. Total Length of Bwd Packet
+007. Fwd Packet Length Max
+008. Fwd Packet Length Min
+009. Fwd Packet Length Mean
+010. Fwd Packet Length Std
+011. Bwd Packet Length Max
+012. Bwd Packet Length Min
+013. Bwd Packet Length Mean
+014. Bwd Packet Length Std
+015. Flow Bytes/s
+016. Flow Packets/s
+017. Flow IAT Mean
+018. Flow IAT Std
+019. Flow IAT Max
+020. Flow IAT Min
+021. Fwd IAT Total
+022. Fwd IAT Mean
+023. Fwd IAT Std
+024. Fwd IAT Max
+025. Fwd IAT Min
+026. Bwd IAT Total
+027. Bwd IAT Mean
+028. Bwd IAT Std
+029. Bwd IAT Max
+030. Bwd IAT Min
+031. Fwd PSH Flags
+032. Fwd URG Flags
+033. Fwd RST Flags
+034. Bwd RST Flags
+035. Fwd Header Length
+036. Bwd Header Length
+037. Fwd Packets/s
+038. Bwd Packets/s
+039. Packet Length Min
+040. Packet Length Max
+041. Packet Length Mean
+042. Packet Length Std
+043. Packet Length Variance
+044. FIN Flag Count
+045. SYN Flag Count
+046. RST Flag Count
+047. PSH Flag Count
+048. ACK Flag Count
+049. URG Flag Count
+050. CWR Flag Count
+051. ECE Flag Count
+052. Down/Up Ratio
+053. Average Packet Size
+054. Fwd Segment Size Avg
+055. Bwd Segment Size Avg
+056. Subflow Fwd Packets
+057. Subflow Fwd Bytes
+058. Subflow Bwd Packets
+059. Subflow Bwd Bytes
+060. FWD Init Win Bytes
+061. Bwd Init Win Bytes
+062. Fwd Act Data Pkts
+063. Fwd Seg Size Min
+064. Active Mean
+065. Active Std
+066. Active Max
+067. Active Min
+068. Idle Mean
+069. Idle Std
+070. Idle Max
+071. Idle Min
+072. ICMP Code
+073. ICMP Type
+074. Total TCP Flow Time
+
+Missing model features:
+None
+
+Attempted records:
+3990
+
+----------------------------------------------------------------------
+FILE: known_validation.parquet
+----------------------------------------------------------------------
+Purpose:
+XGBoost validation and hyperparameter tuning.
+
+Rows: 272988
+Columns: 94
+
+LABEL DISTRIBUTION:
+Label
+BENIGN                        214642
+DoS Hulk                       23770
+DDoS                           14271
+Portscan                       12937
+Infiltration - Portscan         5521
+DoS GoldenEye                   1135
+DoS Slowloris                    579
+Botnet                           111
+Web Attack - Brute Force          11
+Infiltration                       5
+Web Attack - XSS                   3
+Web Attack - SQL Injection         2
+Heartbleed                         1
+
+ALL COLUMNS:
+001. id [int64]
+002. Flow ID [str]
+003. Src IP [str]
+004. Src Port [int64]
+005. Dst IP [str]
+006. Dst Port [int64]
+007. Protocol [int64]
+008. Timestamp [str]
+009. Flow Duration [int64]
+010. Total Fwd Packet [int64]
+011. Total Bwd packets [int64]
+012. Total Length of Fwd Packet [int64]
+013. Total Length of Bwd Packet [int64]
+014. Fwd Packet Length Max [int64]
+015. Fwd Packet Length Min [int64]
+016. Fwd Packet Length Mean [float64]
+017. Fwd Packet Length Std [float64]
+018. Bwd Packet Length Max [int64]
+019. Bwd Packet Length Min [int64]
+020. Bwd Packet Length Mean [float64]
+021. Bwd Packet Length Std [float64]
+022. Flow Bytes/s [float64]
+023. Flow Packets/s [float64]
+024. Flow IAT Mean [float64]
+025. Flow IAT Std [float64]
+026. Flow IAT Max [int64]
+027. Flow IAT Min [int64]
+028. Fwd IAT Total [int64]
+029. Fwd IAT Mean [float64]
+030. Fwd IAT Std [float64]
+031. Fwd IAT Max [int64]
+032. Fwd IAT Min [int64]
+033. Bwd IAT Total [int64]
+034. Bwd IAT Mean [float64]
+035. Bwd IAT Std [float64]
+036. Bwd IAT Max [int64]
+037. Bwd IAT Min [int64]
+038. Fwd PSH Flags [int64]
+039. Bwd PSH Flags [int64]
+040. Fwd URG Flags [int64]
+041. Bwd URG Flags [int64]
+042. Fwd RST Flags [int64]
+043. Bwd RST Flags [int64]
+044. Fwd Header Length [int64]
+045. Bwd Header Length [int64]
+046. Fwd Packets/s [float64]
+047. Bwd Packets/s [float64]
+048. Packet Length Min [int64]
+049. Packet Length Max [int64]
+050. Packet Length Mean [float64]
+051. Packet Length Std [float64]
+052. Packet Length Variance [float64]
+053. FIN Flag Count [int64]
+054. SYN Flag Count [int64]
+055. RST Flag Count [int64]
+056. PSH Flag Count [int64]
+057. ACK Flag Count [int64]
+058. URG Flag Count [int64]
+059. CWR Flag Count [int64]
+060. ECE Flag Count [int64]
+061. Down/Up Ratio [float64]
+062. Average Packet Size [float64]
+063. Fwd Segment Size Avg [float64]
+064. Bwd Segment Size Avg [float64]
+065. Fwd Bytes/Bulk Avg [int64]
+066. Fwd Packet/Bulk Avg [int64]
+067. Fwd Bulk Rate Avg [int64]
+068. Bwd Bytes/Bulk Avg [int64]
+069. Bwd Packet/Bulk Avg [int64]
+070. Bwd Bulk Rate Avg [int64]
+071. Subflow Fwd Packets [int64]
+072. Subflow Fwd Bytes [int64]
+073. Subflow Bwd Packets [int64]
+074. Subflow Bwd Bytes [int64]
+075. FWD Init Win Bytes [int64]
+076. Bwd Init Win Bytes [int64]
+077. Fwd Act Data Pkts [int64]
+078. Fwd Seg Size Min [int64]
+079. Active Mean [float64]
+080. Active Std [float64]
+081. Active Max [int64]
+082. Active Min [int64]
+083. Idle Mean [float64]
+084. Idle Std [float64]
+085. Idle Max [int64]
+086. Idle Min [int64]
+087. ICMP Code [int64]
+088. ICMP Type [int64]
+089. Total TCP Flow Time [int64]
+090. Label [str]
+091. Attempted Category [int64]
+092. source_file [str]
+093. Original_Label [str]
+094. is_attempted [bool]
+
+MODEL FEATURES PRESENT:
+001. Protocol
+002. Flow Duration
+003. Total Fwd Packet
+004. Total Bwd packets
+005. Total Length of Fwd Packet
+006. Total Length of Bwd Packet
+007. Fwd Packet Length Max
+008. Fwd Packet Length Min
+009. Fwd Packet Length Mean
+010. Fwd Packet Length Std
+011. Bwd Packet Length Max
+012. Bwd Packet Length Min
+013. Bwd Packet Length Mean
+014. Bwd Packet Length Std
+015. Flow Bytes/s
+016. Flow Packets/s
+017. Flow IAT Mean
+018. Flow IAT Std
+019. Flow IAT Max
+020. Flow IAT Min
+021. Fwd IAT Total
+022. Fwd IAT Mean
+023. Fwd IAT Std
+024. Fwd IAT Max
+025. Fwd IAT Min
+026. Bwd IAT Total
+027. Bwd IAT Mean
+028. Bwd IAT Std
+029. Bwd IAT Max
+030. Bwd IAT Min
+031. Fwd PSH Flags
+032. Fwd URG Flags
+033. Fwd RST Flags
+034. Bwd RST Flags
+035. Fwd Header Length
+036. Bwd Header Length
+037. Fwd Packets/s
+038. Bwd Packets/s
+039. Packet Length Min
+040. Packet Length Max
+041. Packet Length Mean
+042. Packet Length Std
+043. Packet Length Variance
+044. FIN Flag Count
+045. SYN Flag Count
+046. RST Flag Count
+047. PSH Flag Count
+048. ACK Flag Count
+049. URG Flag Count
+050. CWR Flag Count
+051. ECE Flag Count
+052. Down/Up Ratio
+053. Average Packet Size
+054. Fwd Segment Size Avg
+055. Bwd Segment Size Avg
+056. Subflow Fwd Packets
+057. Subflow Fwd Bytes
+058. Subflow Bwd Packets
+059. Subflow Bwd Bytes
+060. FWD Init Win Bytes
+061. Bwd Init Win Bytes
+062. Fwd Act Data Pkts
+063. Fwd Seg Size Min
+064. Active Mean
+065. Active Std
+066. Active Max
+067. Active Min
+068. Idle Mean
+069. Idle Std
+070. Idle Max
+071. Idle Min
+072. ICMP Code
+073. ICMP Type
+074. Total TCP Flow Time
+
+Missing model features:
+None
+
+Attempted records:
+833
+
+----------------------------------------------------------------------
+FILE: known_test.parquet
+----------------------------------------------------------------------
+Purpose:
+Final known-class evaluation for XGBoost and Autoencoder.
+
+Rows: 272989
+Columns: 94
+
+LABEL DISTRIBUTION:
+Label
+BENIGN                        214643
+DoS Hulk                       23771
+DDoS                           14272
+Portscan                       12937
+Infiltration - Portscan         5522
+DoS GoldenEye                   1135
+DoS Slowloris                    579
+Botnet                           110
+Web Attack - Brute Force          11
+Infiltration                       4
+Web Attack - SQL Injection         2
+Web Attack - XSS                   2
+Heartbleed                         1
+
+ALL COLUMNS:
+001. id [int64]
+002. Flow ID [str]
+003. Src IP [str]
+004. Src Port [int64]
+005. Dst IP [str]
+006. Dst Port [int64]
+007. Protocol [int64]
+008. Timestamp [str]
+009. Flow Duration [int64]
+010. Total Fwd Packet [int64]
+011. Total Bwd packets [int64]
+012. Total Length of Fwd Packet [int64]
+013. Total Length of Bwd Packet [int64]
+014. Fwd Packet Length Max [int64]
+015. Fwd Packet Length Min [int64]
+016. Fwd Packet Length Mean [float64]
+017. Fwd Packet Length Std [float64]
+018. Bwd Packet Length Max [int64]
+019. Bwd Packet Length Min [int64]
+020. Bwd Packet Length Mean [float64]
+021. Bwd Packet Length Std [float64]
+022. Flow Bytes/s [float64]
+023. Flow Packets/s [float64]
+024. Flow IAT Mean [float64]
+025. Flow IAT Std [float64]
+026. Flow IAT Max [int64]
+027. Flow IAT Min [int64]
+028. Fwd IAT Total [int64]
+029. Fwd IAT Mean [float64]
+030. Fwd IAT Std [float64]
+031. Fwd IAT Max [int64]
+032. Fwd IAT Min [int64]
+033. Bwd IAT Total [int64]
+034. Bwd IAT Mean [float64]
+035. Bwd IAT Std [float64]
+036. Bwd IAT Max [int64]
+037. Bwd IAT Min [int64]
+038. Fwd PSH Flags [int64]
+039. Bwd PSH Flags [int64]
+040. Fwd URG Flags [int64]
+041. Bwd URG Flags [int64]
+042. Fwd RST Flags [int64]
+043. Bwd RST Flags [int64]
+044. Fwd Header Length [int64]
+045. Bwd Header Length [int64]
+046. Fwd Packets/s [float64]
+047. Bwd Packets/s [float64]
+048. Packet Length Min [int64]
+049. Packet Length Max [int64]
+050. Packet Length Mean [float64]
+051. Packet Length Std [float64]
+052. Packet Length Variance [float64]
+053. FIN Flag Count [int64]
+054. SYN Flag Count [int64]
+055. RST Flag Count [int64]
+056. PSH Flag Count [int64]
+057. ACK Flag Count [int64]
+058. URG Flag Count [int64]
+059. CWR Flag Count [int64]
+060. ECE Flag Count [int64]
+061. Down/Up Ratio [float64]
+062. Average Packet Size [float64]
+063. Fwd Segment Size Avg [float64]
+064. Bwd Segment Size Avg [float64]
+065. Fwd Bytes/Bulk Avg [int64]
+066. Fwd Packet/Bulk Avg [int64]
+067. Fwd Bulk Rate Avg [int64]
+068. Bwd Bytes/Bulk Avg [int64]
+069. Bwd Packet/Bulk Avg [int64]
+070. Bwd Bulk Rate Avg [int64]
+071. Subflow Fwd Packets [int64]
+072. Subflow Fwd Bytes [int64]
+073. Subflow Bwd Packets [int64]
+074. Subflow Bwd Bytes [int64]
+075. FWD Init Win Bytes [int64]
+076. Bwd Init Win Bytes [int64]
+077. Fwd Act Data Pkts [int64]
+078. Fwd Seg Size Min [int64]
+079. Active Mean [float64]
+080. Active Std [float64]
+081. Active Max [int64]
+082. Active Min [int64]
+083. Idle Mean [float64]
+084. Idle Std [float64]
+085. Idle Max [int64]
+086. Idle Min [int64]
+087. ICMP Code [int64]
+088. ICMP Type [int64]
+089. Total TCP Flow Time [int64]
+090. Label [str]
+091. Attempted Category [int64]
+092. source_file [str]
+093. Original_Label [str]
+094. is_attempted [bool]
+
+MODEL FEATURES PRESENT:
+001. Protocol
+002. Flow Duration
+003. Total Fwd Packet
+004. Total Bwd packets
+005. Total Length of Fwd Packet
+006. Total Length of Bwd Packet
+007. Fwd Packet Length Max
+008. Fwd Packet Length Min
+009. Fwd Packet Length Mean
+010. Fwd Packet Length Std
+011. Bwd Packet Length Max
+012. Bwd Packet Length Min
+013. Bwd Packet Length Mean
+014. Bwd Packet Length Std
+015. Flow Bytes/s
+016. Flow Packets/s
+017. Flow IAT Mean
+018. Flow IAT Std
+019. Flow IAT Max
+020. Flow IAT Min
+021. Fwd IAT Total
+022. Fwd IAT Mean
+023. Fwd IAT Std
+024. Fwd IAT Max
+025. Fwd IAT Min
+026. Bwd IAT Total
+027. Bwd IAT Mean
+028. Bwd IAT Std
+029. Bwd IAT Max
+030. Bwd IAT Min
+031. Fwd PSH Flags
+032. Fwd URG Flags
+033. Fwd RST Flags
+034. Bwd RST Flags
+035. Fwd Header Length
+036. Bwd Header Length
+037. Fwd Packets/s
+038. Bwd Packets/s
+039. Packet Length Min
+040. Packet Length Max
+041. Packet Length Mean
+042. Packet Length Std
+043. Packet Length Variance
+044. FIN Flag Count
+045. SYN Flag Count
+046. RST Flag Count
+047. PSH Flag Count
+048. ACK Flag Count
+049. URG Flag Count
+050. CWR Flag Count
+051. ECE Flag Count
+052. Down/Up Ratio
+053. Average Packet Size
+054. Fwd Segment Size Avg
+055. Bwd Segment Size Avg
+056. Subflow Fwd Packets
+057. Subflow Fwd Bytes
+058. Subflow Bwd Packets
+059. Subflow Bwd Bytes
+060. FWD Init Win Bytes
+061. Bwd Init Win Bytes
+062. Fwd Act Data Pkts
+063. Fwd Seg Size Min
+064. Active Mean
+065. Active Std
+066. Active Max
+067. Active Min
+068. Idle Mean
+069. Idle Std
+070. Idle Max
+071. Idle Min
+072. ICMP Code
+073. ICMP Type
+074. Total TCP Flow Time
+
+Missing model features:
+None
+
+Attempted records:
+876
+
+----------------------------------------------------------------------
+FILE: unknown_test.parquet
+----------------------------------------------------------------------
+Purpose:
+Held-out unknown attack evaluation.
+
+Rows: 8673
+Columns: 94
+
+LABEL DISTRIBUTION:
+Label
+FTP-Patator         3972
+SSH-Patator         2961
+DoS Slowhttptest    1740
+
+ALL COLUMNS:
+001. id [int64]
+002. Flow ID [str]
+003. Src IP [str]
+004. Src Port [int64]
+005. Dst IP [str]
+006. Dst Port [int64]
+007. Protocol [int64]
+008. Timestamp [str]
+009. Flow Duration [int64]
+010. Total Fwd Packet [int64]
+011. Total Bwd packets [int64]
+012. Total Length of Fwd Packet [int64]
+013. Total Length of Bwd Packet [int64]
+014. Fwd Packet Length Max [int64]
+015. Fwd Packet Length Min [int64]
+016. Fwd Packet Length Mean [float64]
+017. Fwd Packet Length Std [float64]
+018. Bwd Packet Length Max [int64]
+019. Bwd Packet Length Min [int64]
+020. Bwd Packet Length Mean [float64]
+021. Bwd Packet Length Std [float64]
+022. Flow Bytes/s [float64]
+023. Flow Packets/s [float64]
+024. Flow IAT Mean [float64]
+025. Flow IAT Std [float64]
+026. Flow IAT Max [int64]
+027. Flow IAT Min [int64]
+028. Fwd IAT Total [int64]
+029. Fwd IAT Mean [float64]
+030. Fwd IAT Std [float64]
+031. Fwd IAT Max [int64]
+032. Fwd IAT Min [int64]
+033. Bwd IAT Total [int64]
+034. Bwd IAT Mean [float64]
+035. Bwd IAT Std [float64]
+036. Bwd IAT Max [int64]
+037. Bwd IAT Min [int64]
+038. Fwd PSH Flags [int64]
+039. Bwd PSH Flags [int64]
+040. Fwd URG Flags [int64]
+041. Bwd URG Flags [int64]
+042. Fwd RST Flags [int64]
+043. Bwd RST Flags [int64]
+044. Fwd Header Length [int64]
+045. Bwd Header Length [int64]
+046. Fwd Packets/s [float64]
+047. Bwd Packets/s [float64]
+048. Packet Length Min [int64]
+049. Packet Length Max [int64]
+050. Packet Length Mean [float64]
+051. Packet Length Std [float64]
+052. Packet Length Variance [float64]
+053. FIN Flag Count [int64]
+054. SYN Flag Count [int64]
+055. RST Flag Count [int64]
+056. PSH Flag Count [int64]
+057. ACK Flag Count [int64]
+058. URG Flag Count [int64]
+059. CWR Flag Count [int64]
+060. ECE Flag Count [int64]
+061. Down/Up Ratio [float64]
+062. Average Packet Size [float64]
+063. Fwd Segment Size Avg [float64]
+064. Bwd Segment Size Avg [float64]
+065. Fwd Bytes/Bulk Avg [int64]
+066. Fwd Packet/Bulk Avg [int64]
+067. Fwd Bulk Rate Avg [int64]
+068. Bwd Bytes/Bulk Avg [int64]
+069. Bwd Packet/Bulk Avg [int64]
+070. Bwd Bulk Rate Avg [int64]
+071. Subflow Fwd Packets [int64]
+072. Subflow Fwd Bytes [int64]
+073. Subflow Bwd Packets [int64]
+074. Subflow Bwd Bytes [int64]
+075. FWD Init Win Bytes [int64]
+076. Bwd Init Win Bytes [int64]
+077. Fwd Act Data Pkts [int64]
+078. Fwd Seg Size Min [int64]
+079. Active Mean [float64]
+080. Active Std [float64]
+081. Active Max [int64]
+082. Active Min [int64]
+083. Idle Mean [float64]
+084. Idle Std [float64]
+085. Idle Max [int64]
+086. Idle Min [int64]
+087. ICMP Code [int64]
+088. ICMP Type [int64]
+089. Total TCP Flow Time [int64]
+090. Label [str]
+091. Attempted Category [int64]
+092. source_file [str]
+093. Original_Label [str]
+094. is_attempted [bool]
+
+MODEL FEATURES PRESENT:
+001. Protocol
+002. Flow Duration
+003. Total Fwd Packet
+004. Total Bwd packets
+005. Total Length of Fwd Packet
+006. Total Length of Bwd Packet
+007. Fwd Packet Length Max
+008. Fwd Packet Length Min
+009. Fwd Packet Length Mean
+010. Fwd Packet Length Std
+011. Bwd Packet Length Max
+012. Bwd Packet Length Min
+013. Bwd Packet Length Mean
+014. Bwd Packet Length Std
+015. Flow Bytes/s
+016. Flow Packets/s
+017. Flow IAT Mean
+018. Flow IAT Std
+019. Flow IAT Max
+020. Flow IAT Min
+021. Fwd IAT Total
+022. Fwd IAT Mean
+023. Fwd IAT Std
+024. Fwd IAT Max
+025. Fwd IAT Min
+026. Bwd IAT Total
+027. Bwd IAT Mean
+028. Bwd IAT Std
+029. Bwd IAT Max
+030. Bwd IAT Min
+031. Fwd PSH Flags
+032. Fwd URG Flags
+033. Fwd RST Flags
+034. Bwd RST Flags
+035. Fwd Header Length
+036. Bwd Header Length
+037. Fwd Packets/s
+038. Bwd Packets/s
+039. Packet Length Min
+040. Packet Length Max
+041. Packet Length Mean
+042. Packet Length Std
+043. Packet Length Variance
+044. FIN Flag Count
+045. SYN Flag Count
+046. RST Flag Count
+047. PSH Flag Count
+048. ACK Flag Count
+049. URG Flag Count
+050. CWR Flag Count
+051. ECE Flag Count
+052. Down/Up Ratio
+053. Average Packet Size
+054. Fwd Segment Size Avg
+055. Bwd Segment Size Avg
+056. Subflow Fwd Packets
+057. Subflow Fwd Bytes
+058. Subflow Bwd Packets
+059. Subflow Bwd Bytes
+060. FWD Init Win Bytes
+061. Bwd Init Win Bytes
+062. Fwd Act Data Pkts
+063. Fwd Seg Size Min
+064. Active Mean
+065. Active Std
+066. Active Max
+067. Active Min
+068. Idle Mean
+069. Idle Std
+070. Idle Max
+071. Idle Min
+072. ICMP Code
+073. ICMP Type
+074. Total TCP Flow Time
+
+Missing model features:
+None
+
+Attempted records:
+0
+
+----------------------------------------------------------------------
+FILE: autoencoder_benign_train.parquet
+----------------------------------------------------------------------
+Purpose:
+BENIGN-only Autoencoder training.
+
+Rows: 997673
+Columns: 94
+
+LABEL DISTRIBUTION:
+Label
+BENIGN    997673
+
+ALL COLUMNS:
+001. id [int64]
+002. Flow ID [str]
+003. Src IP [str]
+004. Src Port [int64]
+005. Dst IP [str]
+006. Dst Port [int64]
+007. Protocol [int64]
+008. Timestamp [str]
+009. Flow Duration [int64]
+010. Total Fwd Packet [int64]
+011. Total Bwd packets [int64]
+012. Total Length of Fwd Packet [int64]
+013. Total Length of Bwd Packet [int64]
+014. Fwd Packet Length Max [int64]
+015. Fwd Packet Length Min [int64]
+016. Fwd Packet Length Mean [float64]
+017. Fwd Packet Length Std [float64]
+018. Bwd Packet Length Max [int64]
+019. Bwd Packet Length Min [int64]
+020. Bwd Packet Length Mean [float64]
+021. Bwd Packet Length Std [float64]
+022. Flow Bytes/s [float64]
+023. Flow Packets/s [float64]
+024. Flow IAT Mean [float64]
+025. Flow IAT Std [float64]
+026. Flow IAT Max [int64]
+027. Flow IAT Min [int64]
+028. Fwd IAT Total [int64]
+029. Fwd IAT Mean [float64]
+030. Fwd IAT Std [float64]
+031. Fwd IAT Max [int64]
+032. Fwd IAT Min [int64]
+033. Bwd IAT Total [int64]
+034. Bwd IAT Mean [float64]
+035. Bwd IAT Std [float64]
+036. Bwd IAT Max [int64]
+037. Bwd IAT Min [int64]
+038. Fwd PSH Flags [int64]
+039. Bwd PSH Flags [int64]
+040. Fwd URG Flags [int64]
+041. Bwd URG Flags [int64]
+042. Fwd RST Flags [int64]
+043. Bwd RST Flags [int64]
+044. Fwd Header Length [int64]
+045. Bwd Header Length [int64]
+046. Fwd Packets/s [float64]
+047. Bwd Packets/s [float64]
+048. Packet Length Min [int64]
+049. Packet Length Max [int64]
+050. Packet Length Mean [float64]
+051. Packet Length Std [float64]
+052. Packet Length Variance [float64]
+053. FIN Flag Count [int64]
+054. SYN Flag Count [int64]
+055. RST Flag Count [int64]
+056. PSH Flag Count [int64]
+057. ACK Flag Count [int64]
+058. URG Flag Count [int64]
+059. CWR Flag Count [int64]
+060. ECE Flag Count [int64]
+061. Down/Up Ratio [float64]
+062. Average Packet Size [float64]
+063. Fwd Segment Size Avg [float64]
+064. Bwd Segment Size Avg [float64]
+065. Fwd Bytes/Bulk Avg [int64]
+066. Fwd Packet/Bulk Avg [int64]
+067. Fwd Bulk Rate Avg [int64]
+068. Bwd Bytes/Bulk Avg [int64]
+069. Bwd Packet/Bulk Avg [int64]
+070. Bwd Bulk Rate Avg [int64]
+071. Subflow Fwd Packets [int64]
+072. Subflow Fwd Bytes [int64]
+073. Subflow Bwd Packets [int64]
+074. Subflow Bwd Bytes [int64]
+075. FWD Init Win Bytes [int64]
+076. Bwd Init Win Bytes [int64]
+077. Fwd Act Data Pkts [int64]
+078. Fwd Seg Size Min [int64]
+079. Active Mean [float64]
+080. Active Std [float64]
+081. Active Max [int64]
+082. Active Min [int64]
+083. Idle Mean [float64]
+084. Idle Std [float64]
+085. Idle Max [int64]
+086. Idle Min [int64]
+087. ICMP Code [int64]
+088. ICMP Type [int64]
+089. Total TCP Flow Time [int64]
+090. Label [str]
+091. Attempted Category [int64]
+092. source_file [str]
+093. Original_Label [str]
+094. is_attempted [bool]
+
+MODEL FEATURES PRESENT:
+001. Protocol
+002. Flow Duration
+003. Total Fwd Packet
+004. Total Bwd packets
+005. Total Length of Fwd Packet
+006. Total Length of Bwd Packet
+007. Fwd Packet Length Max
+008. Fwd Packet Length Min
+009. Fwd Packet Length Mean
+010. Fwd Packet Length Std
+011. Bwd Packet Length Max
+012. Bwd Packet Length Min
+013. Bwd Packet Length Mean
+014. Bwd Packet Length Std
+015. Flow Bytes/s
+016. Flow Packets/s
+017. Flow IAT Mean
+018. Flow IAT Std
+019. Flow IAT Max
+020. Flow IAT Min
+021. Fwd IAT Total
+022. Fwd IAT Mean
+023. Fwd IAT Std
+024. Fwd IAT Max
+025. Fwd IAT Min
+026. Bwd IAT Total
+027. Bwd IAT Mean
+028. Bwd IAT Std
+029. Bwd IAT Max
+030. Bwd IAT Min
+031. Fwd PSH Flags
+032. Fwd URG Flags
+033. Fwd RST Flags
+034. Bwd RST Flags
+035. Fwd Header Length
+036. Bwd Header Length
+037. Fwd Packets/s
+038. Bwd Packets/s
+039. Packet Length Min
+040. Packet Length Max
+041. Packet Length Mean
+042. Packet Length Std
+043. Packet Length Variance
+044. FIN Flag Count
+045. SYN Flag Count
+046. RST Flag Count
+047. PSH Flag Count
+048. ACK Flag Count
+049. URG Flag Count
+050. CWR Flag Count
+051. ECE Flag Count
+052. Down/Up Ratio
+053. Average Packet Size
+054. Fwd Segment Size Avg
+055. Bwd Segment Size Avg
+056. Subflow Fwd Packets
+057. Subflow Fwd Bytes
+058. Subflow Bwd Packets
+059. Subflow Bwd Bytes
+060. FWD Init Win Bytes
+061. Bwd Init Win Bytes
+062. Fwd Act Data Pkts
+063. Fwd Seg Size Min
+064. Active Mean
+065. Active Std
+066. Active Max
+067. Active Min
+068. Idle Mean
+069. Idle Std
+070. Idle Max
+071. Idle Min
+072. ICMP Code
+073. ICMP Type
+074. Total TCP Flow Time
+
+Missing model features:
+None
+
+Attempted records:
+0
+
+----------------------------------------------------------------------
+FILE: autoencoder_benign_validation.parquet
+----------------------------------------------------------------------
+Purpose:
+BENIGN-only Autoencoder threshold calibration.
+
+Rows: 213809
+Columns: 94
+
+LABEL DISTRIBUTION:
+Label
+BENIGN    213809
+
+ALL COLUMNS:
+001. id [int64]
+002. Flow ID [str]
+003. Src IP [str]
+004. Src Port [int64]
+005. Dst IP [str]
+006. Dst Port [int64]
+007. Protocol [int64]
+008. Timestamp [str]
+009. Flow Duration [int64]
+010. Total Fwd Packet [int64]
+011. Total Bwd packets [int64]
+012. Total Length of Fwd Packet [int64]
+013. Total Length of Bwd Packet [int64]
+014. Fwd Packet Length Max [int64]
+015. Fwd Packet Length Min [int64]
+016. Fwd Packet Length Mean [float64]
+017. Fwd Packet Length Std [float64]
+018. Bwd Packet Length Max [int64]
+019. Bwd Packet Length Min [int64]
+020. Bwd Packet Length Mean [float64]
+021. Bwd Packet Length Std [float64]
+022. Flow Bytes/s [float64]
+023. Flow Packets/s [float64]
+024. Flow IAT Mean [float64]
+025. Flow IAT Std [float64]
+026. Flow IAT Max [int64]
+027. Flow IAT Min [int64]
+028. Fwd IAT Total [int64]
+029. Fwd IAT Mean [float64]
+030. Fwd IAT Std [float64]
+031. Fwd IAT Max [int64]
+032. Fwd IAT Min [int64]
+033. Bwd IAT Total [int64]
+034. Bwd IAT Mean [float64]
+035. Bwd IAT Std [float64]
+036. Bwd IAT Max [int64]
+037. Bwd IAT Min [int64]
+038. Fwd PSH Flags [int64]
+039. Bwd PSH Flags [int64]
+040. Fwd URG Flags [int64]
+041. Bwd URG Flags [int64]
+042. Fwd RST Flags [int64]
+043. Bwd RST Flags [int64]
+044. Fwd Header Length [int64]
+045. Bwd Header Length [int64]
+046. Fwd Packets/s [float64]
+047. Bwd Packets/s [float64]
+048. Packet Length Min [int64]
+049. Packet Length Max [int64]
+050. Packet Length Mean [float64]
+051. Packet Length Std [float64]
+052. Packet Length Variance [float64]
+053. FIN Flag Count [int64]
+054. SYN Flag Count [int64]
+055. RST Flag Count [int64]
+056. PSH Flag Count [int64]
+057. ACK Flag Count [int64]
+058. URG Flag Count [int64]
+059. CWR Flag Count [int64]
+060. ECE Flag Count [int64]
+061. Down/Up Ratio [float64]
+062. Average Packet Size [float64]
+063. Fwd Segment Size Avg [float64]
+064. Bwd Segment Size Avg [float64]
+065. Fwd Bytes/Bulk Avg [int64]
+066. Fwd Packet/Bulk Avg [int64]
+067. Fwd Bulk Rate Avg [int64]
+068. Bwd Bytes/Bulk Avg [int64]
+069. Bwd Packet/Bulk Avg [int64]
+070. Bwd Bulk Rate Avg [int64]
+071. Subflow Fwd Packets [int64]
+072. Subflow Fwd Bytes [int64]
+073. Subflow Bwd Packets [int64]
+074. Subflow Bwd Bytes [int64]
+075. FWD Init Win Bytes [int64]
+076. Bwd Init Win Bytes [int64]
+077. Fwd Act Data Pkts [int64]
+078. Fwd Seg Size Min [int64]
+079. Active Mean [float64]
+080. Active Std [float64]
+081. Active Max [int64]
+082. Active Min [int64]
+083. Idle Mean [float64]
+084. Idle Std [float64]
+085. Idle Max [int64]
+086. Idle Min [int64]
+087. ICMP Code [int64]
+088. ICMP Type [int64]
+089. Total TCP Flow Time [int64]
+090. Label [str]
+091. Attempted Category [int64]
+092. source_file [str]
+093. Original_Label [str]
+094. is_attempted [bool]
+
+MODEL FEATURES PRESENT:
+001. Protocol
+002. Flow Duration
+003. Total Fwd Packet
+004. Total Bwd packets
+005. Total Length of Fwd Packet
+006. Total Length of Bwd Packet
+007. Fwd Packet Length Max
+008. Fwd Packet Length Min
+009. Fwd Packet Length Mean
+010. Fwd Packet Length Std
+011. Bwd Packet Length Max
+012. Bwd Packet Length Min
+013. Bwd Packet Length Mean
+014. Bwd Packet Length Std
+015. Flow Bytes/s
+016. Flow Packets/s
+017. Flow IAT Mean
+018. Flow IAT Std
+019. Flow IAT Max
+020. Flow IAT Min
+021. Fwd IAT Total
+022. Fwd IAT Mean
+023. Fwd IAT Std
+024. Fwd IAT Max
+025. Fwd IAT Min
+026. Bwd IAT Total
+027. Bwd IAT Mean
+028. Bwd IAT Std
+029. Bwd IAT Max
+030. Bwd IAT Min
+031. Fwd PSH Flags
+032. Fwd URG Flags
+033. Fwd RST Flags
+034. Bwd RST Flags
+035. Fwd Header Length
+036. Bwd Header Length
+037. Fwd Packets/s
+038. Bwd Packets/s
+039. Packet Length Min
+040. Packet Length Max
+041. Packet Length Mean
+042. Packet Length Std
+043. Packet Length Variance
+044. FIN Flag Count
+045. SYN Flag Count
+046. RST Flag Count
+047. PSH Flag Count
+048. ACK Flag Count
+049. URG Flag Count
+050. CWR Flag Count
+051. ECE Flag Count
+052. Down/Up Ratio
+053. Average Packet Size
+054. Fwd Segment Size Avg
+055. Bwd Segment Size Avg
+056. Subflow Fwd Packets
+057. Subflow Fwd Bytes
+058. Subflow Bwd Packets
+059. Subflow Bwd Bytes
+060. FWD Init Win Bytes
+061. Bwd Init Win Bytes
+062. Fwd Act Data Pkts
+063. Fwd Seg Size Min
+064. Active Mean
+065. Active Std
+066. Active Max
+067. Active Min
+068. Idle Mean
+069. Idle Std
+070. Idle Max
+071. Idle Min
+072. ICMP Code
+073. ICMP Type
+074. Total TCP Flow Time
+
+Missing model features:
+None
+
+Attempted records:
+0
+
+================================================================================
+5. OFFICIAL MODEL FEATURE LIST
+================================================================================
+
+Total model features: 74
+001. Protocol
+002. Flow Duration
+003. Total Fwd Packet
+004. Total Bwd packets
+005. Total Length of Fwd Packet
+006. Total Length of Bwd Packet
+007. Fwd Packet Length Max
+008. Fwd Packet Length Min
+009. Fwd Packet Length Mean
+010. Fwd Packet Length Std
+011. Bwd Packet Length Max
+012. Bwd Packet Length Min
+013. Bwd Packet Length Mean
+014. Bwd Packet Length Std
+015. Flow Bytes/s
+016. Flow Packets/s
+017. Flow IAT Mean
+018. Flow IAT Std
+019. Flow IAT Max
+020. Flow IAT Min
+021. Fwd IAT Total
+022. Fwd IAT Mean
+023. Fwd IAT Std
+024. Fwd IAT Max
+025. Fwd IAT Min
+026. Bwd IAT Total
+027. Bwd IAT Mean
+028. Bwd IAT Std
+029. Bwd IAT Max
+030. Bwd IAT Min
+031. Fwd PSH Flags
+032. Fwd URG Flags
+033. Fwd RST Flags
+034. Bwd RST Flags
+035. Fwd Header Length
+036. Bwd Header Length
+037. Fwd Packets/s
+038. Bwd Packets/s
+039. Packet Length Min
+040. Packet Length Max
+041. Packet Length Mean
+042. Packet Length Std
+043. Packet Length Variance
+044. FIN Flag Count
+045. SYN Flag Count
+046. RST Flag Count
+047. PSH Flag Count
+048. ACK Flag Count
+049. URG Flag Count
+050. CWR Flag Count
+051. ECE Flag Count
+052. Down/Up Ratio
+053. Average Packet Size
+054. Fwd Segment Size Avg
+055. Bwd Segment Size Avg
+056. Subflow Fwd Packets
+057. Subflow Fwd Bytes
+058. Subflow Bwd Packets
+059. Subflow Bwd Bytes
+060. FWD Init Win Bytes
+061. Bwd Init Win Bytes
+062. Fwd Act Data Pkts
+063. Fwd Seg Size Min
+064. Active Mean
+065. Active Std
+066. Active Max
+067. Active Min
+068. Idle Mean
+069. Idle Std
+070. Idle Max
+071. Idle Min
+072. ICMP Code
+073. ICMP Type
+074. Total TCP Flow Time
+
+Excluded metadata columns:
+- Attempted Category
+- Bwd Avg Bulk Rate
+- Bwd Avg Bytes/Bulk
+- Bwd Avg Packets/Bulk
+- Bwd Bulk Rate Avg
+- Bwd Bytes/Bulk Avg
+- Bwd PSH Flags
+- Bwd Packet/Bulk Avg
+- Bwd URG Flags
+- Destination Port
+- Dst IP
+- Dst Port
+- Flow ID
+- Fwd Avg Bulk Rate
+- Fwd Avg Bytes/Bulk
+- Fwd Avg Packets/Bulk
+- Fwd Bulk Rate Avg
+- Fwd Bytes/Bulk Avg
+- Fwd Header Length.1
+- Fwd Packet/Bulk Avg
+- Label
+- Original_Label
+- Src IP
+- Src Port
+- Timestamp
+- id
+- is_attempted
+- source_file
+
+================================================================================
+6. TRAIN / VALIDATION / TEST SPLIT
+================================================================================
+
+Known training: 1273944
+Known validation: 272988
+Known testing: 272989
+
+Autoencoder BENIGN training: 997673
+Autoencoder BENIGN validation: 213809
+
+Unknown attack testing: 8673
+
+CLASS-WISE SPLIT SUMMARY:
+                              Train  Validation    Test  Unknown_test
+Label                                                                
+BENIGN                      1001663      214642  214643             0
+DoS Hulk                     110927       23770   23771             0
+DDoS                          66601       14271   14272             0
+Portscan                      60371       12937   12937             0
+Infiltration - Portscan       25768        5521    5522             0
+DoS GoldenEye                  5297        1135    1135             0
+DoS Slowloris                  2701         579     579             0
+Botnet                          515         111     110             0
+Web Attack - Brute Force         51          11      11             0
+Infiltration                     22           5       4             0
+Web Attack - XSS                 13           3       2             0
+Web Attack - SQL Injection        9           2       2             0
+Heartbleed                        6           1       1             0
+FTP-Patator                       0           0       0          3972
+SSH-Patator                       0           0       0          2961
+DoS Slowhttptest                  0           0       0          1740
+
+================================================================================
+7. FINAL DATA QUALITY VALIDATION
+================================================================================
+Missing model values: 0
+Infinite model values: 0
+Duplicate feature vectors: 0
+
+Unknown classes in training:
+0
+
+Unknown classes in validation:
+0
+
+================================================================================
+8. FINAL STATUS
+================================================================================
+Preprocessing completed.
+All generated datasets documented.
+Original columns retained.
+Model features separately identified.
+Known/unknown separation validated.
+
+IMPORTANT:
+Label, attempted metadata, IP addresses, timestamps and identifiers must not be used as model inputs.
+
+================================================================================
+END OF GC2 DATA DOCUMENTATION
+================================================================================
